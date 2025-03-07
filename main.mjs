@@ -1,13 +1,13 @@
 function Container () {
-    this.bowlsId = 1;                   // increID for each bowl
-    this.bowlsList = [];
+    this.bowlsId = 1;                   // Incremental ID for each bowl
+    this.bowlsList = [];                // List of all bowls
 
     function Bowl (id, size, base) {
-        this.id = id;
-        this.size = new Size(size);
-        this.base = new Base(base);
-        this.proteins = [];
-        this.ingredients = [];
+        this.id = id;                   // ID of the bowl
+        this.size = new Size(size);     // Size of the bowl
+        this.base = new Base(base);     // Base of the bowl
+        this.proteins = [];             // List of proteins in the bowl
+        this.ingredients = [];          // List of ingredients in the bowl
         
         
         this.getSize = function () {
@@ -54,7 +54,8 @@ function Container () {
         this.getSize = function () {
             return this.sizeType;
         }
-
+        
+        // Function to facilitate the return of the size in number format
         this.returnSize = function () {
             return this.converter[this.sizeType];
         }
@@ -93,7 +94,9 @@ function Container () {
         return bowl;
     }
 
+    // Function to filter the bowls by size and base
     this.getFilter = function (size, base){
+        //hello
         return [...this.bowlsList].filter(x=>x.getBase()===base && x.getSize()===size);
     }
 
@@ -109,18 +112,21 @@ function Container () {
         return [...this.bowlsList].find(x=>x.id===id);
     }
 
+    // Function to delete a bowl by ID
     this.deleteBowl = function (id) {
         this.bowlsList = this.bowlsList.filter(bowl => bowl.id !== id);
     }
 }
 
-const container =  new Container();
+const container =  new Container();         // Create a new container object
 
-const myBowl = container.addBowl('S', 'white rice');
+// Add bowls to the container
+const myBowl = container.addBowl('S', 'white rice');        // Test bowl
 container.addBowl('M', 'black rice');
 container.addBowl('L', 'salad');
 container.addBowl('S', 'white rice');
 
+// Add proteins and ingredients to the test bowl
 myBowl.addProtein('chicken');
 myBowl.addProtein('beef');            // Test for max number of proteins reached
 myBowl.addIngredient('lettuce');
@@ -129,13 +135,20 @@ myBowl.addIngredient('corn');
 myBowl.addIngredient('cheese');
 myBowl.addIngredient('croutons');           // Test for max number of ingredients reached
 
+console.log('====================\nFiltering function projection\n====================');
+console.log(container.getFilter('S', 'white rice'));        // Filter function test
+
+console.log('====================\nSorting the bowls\n====================');
 console.log(container.sortBySize());        // Sort function test
 
+console.log('====================\nBowls list retrival\n====================');
 const temp = container.getBowlsList()
 console.log(temp[0].getContents());
 
+console.log('====================\nBowl selection by ID\n====================');
 console.log(container.getBowlbyID(3));
 
-
-//container.deleteBowl(3);
-console.log(container.getBowlsList());
+// Delete a bowl by ID
+console.log('====================\nDelete functionality\n====================');
+container.deleteBowl(3);
+console.log(container.getBowlsList()); 
