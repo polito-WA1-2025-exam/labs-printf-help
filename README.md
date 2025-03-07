@@ -1,12 +1,13 @@
-# Group "GROUP NAME"
+# Group "prinf('Help')"
 
 ## Members
-- s346317 UGLIANO ANDREA
+- s347814 APPEL ROLF
 - s346565 SEDIA TOMMASO
+- s346317 UGLIANO ANDREA
 - s293382 VIANELLO SAMUELE
-- s347814 ROLF APPEL
 
-# Exercise "NAME OF EXERCISE"
+
+# Exercise "Poke"
 
 # Lab Journal
 
