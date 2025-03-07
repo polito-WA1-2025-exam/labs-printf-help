@@ -1,4 +1,4 @@
-# Group "prinf('Help')"
+# Group "prinf("Help");"
 
 ## Members
 - s347814 APPEL ROLF
