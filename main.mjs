@@ -27,7 +27,7 @@ function Container () {
         }
 
         this.addProtein = function (protein) {
-            if ((this.proteins.length < this.size.returnSize())) {
+            if ((this.proteins.length < this.size.maxProteins())) {
                 this.proteins.push(new Protein(protein));
             } else {
                 console.log('Max number of proteins reached');
@@ -35,7 +35,7 @@ function Container () {
         }
     
         this.addIngredient = function (ingredient) {
-            if ((this.size.getSize() === 'L' && this.ingredients.length < 6) || (this.ingredients.length < 4)) {
+            if (this.ingredients.length < this.size.maxIngredients()) {
                 this.ingredients.push(new Ingredient(ingredient));
             } else {
                 console.log('Max number of ingredients reached');
@@ -56,8 +56,14 @@ function Container () {
         }
         
         // Function to facilitate the return of the size in number format
-        this.returnSize = function () {
+        this.maxProteins = function () {
             return this.converter[this.sizeType];
+        }
+
+        this.maxIngredients = function () {
+            if (sizeType == "L")
+                return 6
+            return 4
         }
     }
 

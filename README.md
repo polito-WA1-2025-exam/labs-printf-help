@@ -43,7 +43,8 @@
     Function Name    | What it does
     -------- | -------
     getSize()    |     returns size type
-    returnSize() 	|returns protein limit (1-3)
+    maxProteins() 	|returns proteins limit (1 - 3)
+    maxIngredients() 	|returns ingredients limit (4 or 6)
     
     **Base**
     | Function Name    | What it does |
