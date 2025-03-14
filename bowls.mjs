@@ -51,6 +51,15 @@ export class Bowl {
         console.log('Proteins: ' + this.getProteins().map(protein => protein.getProtein()));
         console.log('Ingredients: ' + this.getIngredients().map(ingredient => ingredient.getIngredient()));
     }
+
+    toJSON() {
+        return {
+            size: this.size ? this.size.getSize() : null,
+            base: this.base ? this.base.getBase() : null,
+            proteins: this.proteins.map(p => p.getProtein()),
+            ingredients: this.ingredients.map(i => i.getIngredient())
+        };
+    }
 }
 
 /*

@@ -64,11 +64,11 @@
 
 ## Lab2:
 - added database orders. How to insert:
-'''INSERT INTO orders (user_id, order_contents)
+'''INSERT INTO orders (user_id, order_contents, (default 0.0)total_price, (optional) applied_discount)
 VALUES (1, '[
-    {"bowl_id": 1, "ingredients": ["chicken", "rice", "broccoli"]},
-    {"bowl_id": 2, "ingredients": ["beef", "noodles", "carrots"]}
-]'); '''
+    {"bowl_id": 1, "proteins" : ["salmon"], "ingredients": ["chicken", "rice", "broccoli"]},
+    {"bowl_id": 2, "proteins" : ["tuna", "octopus"] "ingredients": ["beef", "noodles", "carrots"]}
+]', ); '''
 
 
 
