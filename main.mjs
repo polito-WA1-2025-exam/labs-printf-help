@@ -1,160 +1,104 @@
-function Container () {
-    this.bowlsId = 1;                   // Incremental ID for each bowl
-    this.bowlsList = [];                // List of all bowls
+import { Bowl, Size, Base, Protein, Ingredient } from "./bowls.mjs";
+import sqlite from 'sqlite3';
+import dayjs from 'dayjs';
 
-    function Bowl (id, size, base) {
-        this.id = id;                   // ID of the bowl
-        this.size = new Size(size);     // Size of the bowl
-        this.base = new Base(base);     // Base of the bowl
-        this.proteins = [];             // List of proteins in the bowl
-        this.ingredients = [];          // List of ingredients in the bowl
-        
-        
-        this.getSize = function () {
-            return this.size.getSize();
-        }
-
-        this.getBase = function () {
-            return this.base.getBase();
-        }
-
-        this.getProteins = function () {
-            return [...this.proteins];
-        }
-
-        this.getIngredients = function () {
-            return [...this.ingredients];
-        }
-
-        this.addProtein = function (protein) {
-            if ((this.proteins.length < this.size.maxProteins())) {
-                this.proteins.push(new Protein(protein));
-            } else {
-                console.log('Max number of proteins reached');
-            }
-        }
-    
-        this.addIngredient = function (ingredient) {
-            if (this.ingredients.length < this.size.maxIngredients()) {
-                this.ingredients.push(new Ingredient(ingredient));
-            } else {
-                console.log('Max number of ingredients reached');
-            }
-        }
-
-        this.getContents = function () {
-            return [...this.proteins, ...this.ingredients];
-        }
+class Container {
+    constructor() {
+        this.orders = []; // List of all bowls
     }
 
-    function Size (sizeType) {
-        this.sizeType = sizeType;
-        this.converter = {3: 'L', 2: 'M', 1: 'S'};
-
-        this.getSize = function () {
-            return this.sizeType;
-        }
-        
-        // Function to facilitate the return of the size in number format
-        this.maxProteins = function () {
-            return this.converter[this.sizeType];
-        }
-
-        this.maxIngredients = function () {
-            if (sizeType == "L")
-                return 6
-            return 4
-        }
+    // Aggiunge i metodi al prototype di Container 
+    createBowlObj() {
+        return new Bowl();
     }
 
-    function Base (baseName) {
-        this.baseName = baseName;
-
-        this.getBase = function () {
-            return this.baseName;
-        }
+    addBowl(bowl) {
+        this.orders.push(bowl);
     }
 
-    function Protein (proteinName) {
-        this.proteinName = proteinName;
+    submitOrder(db) {
+        return new Promise((resolve, reject) => {
+            const sql = `INSERT INTO orders (size, base, proteins, ingredients, order_date)
+                        VALUES (?, ?, ?, ?, ?)`;    
 
-        this.getProtein = function () {
-            return this.proteinName;
-        }
+            this.orders.forEach(bowl => {
+                db.run(
+                    sql, 
+                    [
+                        bowl.getSize(), 
+                        bowl.getBase(), 
+                        bowl.getProteins().map(protein => protein.getProtein()), 
+                        bowl.getIngredients().map(ingredient => ingredient.getIngredient()), 
+                        dayjs().format('YYYY-MM-DD HH:mm:ss')
+                    ], 
+                    function(err) {
+                        if (err) {
+                            reject(err);
+                        }
+                        else {
+                            resolve();
+                        }
+                    }
+                );
+            });
+        });
     }
 
-    function Ingredient (ingredientName) {
-        this.ingredientName = ingredientName;
+    // // Metodi commentati
+    // getFilter(size, base) {
+    //     return [...this.orders].filter(x => x.getBase() === base && x.getSize() === size);
+    // }
 
-        this.getIngredient = function () {
-            return this.ingredientName;
-        }
-    }
-    
-    this.addBowl = function (size, base) {
-        const bowl = new Bowl(this.bowlsId, size, base);
+    // sortBySize() {
+    //     return [...this.orders].sort((a, b) => b.getSize().localeCompare(a.getSize()));
+    // }
 
-        this.bowlsId++;
-        this.bowlsList.push(bowl);
-        
-        return bowl;
-    }
+    // getBowlsList() {
+    //     return [...this.orders];
+    // }
 
-    // Function to filter the bowls by size and base
-    this.getFilter = function (size, base){
-        //hello
-        return [...this.bowlsList].filter(x=>x.getBase()===base && x.getSize()===size);
-    }
+    // getBowlbyID(id) {
+    //     return [...this.orders].find(x => x.id === id);
+    // }
 
-    this.sortBySize = function (){
-        return [...this.bowlsList].sort((a, b) => b.getSize().localeCompare(a.getSize()));
-    }
-
-    this.getBowlsList = function () {
-        return [...this.bowlsList];
-    }
-
-    this.getBowlbyID = function (id) {
-        return [...this.bowlsList].find(x=>x.id===id);
-    }
-
-    // Function to delete a bowl by ID
-    this.deleteBowl = function (id) {
-        this.bowlsList = this.bowlsList.filter(bowl => bowl.id !== id);
-    }
+    // deleteBowl(id) {
+    //     this.orders = this.orders.filter(bowl => bowl.id !== id);
+    // }
 }
 
-const container =  new Container();         // Create a new container object
+const container = new Container();         // Create a new container object
 
 // Add bowls to the container
-const myBowl = container.addBowl('S', 'white rice');        // Test bowl
-container.addBowl('M', 'black rice');
-container.addBowl('L', 'salad');
-container.addBowl('S', 'white rice');
+const bowl1 = container.createBowlObj();
 
-// Add proteins and ingredients to the test bowl
-myBowl.addProtein('chicken');
-myBowl.addProtein('beef');            // Test for max number of proteins reached
-myBowl.addIngredient('lettuce');
-myBowl.addIngredient('tomato');
-myBowl.addIngredient('corn');
-myBowl.addIngredient('cheese');
-myBowl.addIngredient('croutons');           // Test for max number of ingredients reached
+bowl1.setSize('L');
+bowl1.setBase('White Rice');
+bowl1.setProteins(['Chicken', 'Beef']);
+bowl1.setIngredients(['Tomato', 'Lettuce', 'Onion', 'Cucumber']);
+bowl1.displayContents();
 
-console.log('====================\nFiltering function projection\n====================');
-console.log(container.getFilter('S', 'white rice'));        // Filter function test
+container.addBowl(bowl1);
 
-console.log('====================\nSorting the bowls\n====================');
-console.log(container.sortBySize());        // Sort function test
+const db = new sqlite.Database('orders.db', (err) => {
+    if (err) {
+        console.error(err.message);
+    }
+    console.log('Connected to the orders database.');
+}); 
 
-console.log('====================\nBowls list retrival\n====================');
-const temp = container.getBowlsList()
-console.log(temp[0].getContents());
+// Commenta questa riga se non sei pronto a inviare l'ordine
+container.submitOrder(db).then(() => {
+    console.log('Order submitted successfully');
+}
+).catch((err) => {
+    console.error(err);
+});
 
-console.log('====================\nBowl selection by ID\n====================');
-console.log(container.getBowlbyID(3));
-
-// Delete a bowl by ID
-console.log('====================\nDelete functionality\n====================');
-container.deleteBowl(3);
-console.log(container.getBowlsList()); 
+// Crea un nuovo Bowl direttamente dalla classe importata
+console.log()
+let b = new Bowl();
+b.setSize('L');
+b.setBase('White Rice');
+b.setProteins(['Chicken', 'Beef']);
+b.setIngredients(['Tomato', 'Lettuce', 'Onion', 'Cucumber']);
+b.displayContents();

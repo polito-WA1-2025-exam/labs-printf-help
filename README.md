@@ -62,5 +62,14 @@
     getIngredient()    |     returns Ingredient name
 
 
+## Lab2:
+- added database orders. How to insert:
+'''INSERT INTO orders (user_id, order_contents)
+VALUES (1, '[
+    {"bowl_id": 1, "ingredients": ["chicken", "rice", "broccoli"]},
+    {"bowl_id": 2, "ingredients": ["beef", "noodles", "carrots"]}
+]'); '''
+
+
 
 (you mayupdate this file to keep track of the progress of your group work, throughout the weeks)
