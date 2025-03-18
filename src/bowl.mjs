@@ -46,6 +46,7 @@ export class Bowl {
     }
 
     displayContents() {
+        console.log();
         console.log('Size: ' + this.getSize());
         console.log('Base: ' + this.getBase());
         console.log('Proteins: ' + this.getProteins().map(protein => protein.getProtein()));
@@ -62,63 +63,8 @@ export class Bowl {
     }
 }
 
-/*
-export class Bowl {
-    constructor() {
-        this.size = null;
-        this.base = null;
-        this.proteins = [];
-        this.ingredients = [];
-        
-        // Valid values - could be moved to constants
-        this.validSizes = ['S', 'M', 'L'];
-        this.validBases = ['White Rice', 'Brown Rice', 'Quinoa', 'Salad'];
-        this.maxProteins = { 'S': 1, 'M': 2, 'L': 3 };
-        this.maxIngredients = { 'S': 4, 'M': 4, 'L': 6 };
-    }
-    
-    // Validate and set size
-    setSize(size) {
-        if (!this.validSizes.includes(size)) {
-            throw new Error(`Invalid size: ${size}. Valid sizes are: ${this.validSizes.join(', ')}`);
-        }
-        this.size = new Size(size);
-        return this; // For method chaining
-    }
-    
-    // Similar validation for other setters...
-    
-    // Validate number of proteins based on bowl size
-    setProteins(proteins) {
-        if (!this.size) {
-            throw new Error('Please set bowl size before adding proteins');
-        }
-        
-        const maxAllowed = this.maxProteins[this.getSize()];
-        if (proteins.length > maxAllowed) {
-            throw new Error(`Maximum ${maxAllowed} proteins allowed for size ${this.getSize()}`);
-        }
-        
-        this.proteins = proteins.map(p => new Protein(p));
-        return this;
-    }
-    
-    // For better accessibility/serialization
-    toJSON() {
-        return {
-            size: this.size ? this.size.getSize() : null,
-            base: this.base ? this.base.getBase() : null,
-            proteins: this.proteins.map(p => p.getProtein()),
-            ingredients: this.ingredients.map(i => i.getIngredient())
-        };
-    }
-}
-
-*/
-
-
 // SIZE CLASS
-export class Size {
+class Size {
     constructor(sizeType) {
         this.sizeType = sizeType;
         this.converter = { 3: 'L', 2: 'M', 1: 'S' };
@@ -142,7 +88,7 @@ export class Size {
 }
 
 // BASE CLASS
-export class Base {
+class Base {
     constructor(baseName) {
         this.baseName = baseName;
     }
@@ -153,7 +99,7 @@ export class Base {
 }
 
 // PROTEIN CLASS
-export class Protein {
+class Protein {
     constructor(proteinName) {
         this.proteinName = proteinName;
     }
@@ -164,7 +110,7 @@ export class Protein {
 }
 
 // INGREDIENT CLASS
-export class Ingredient {
+class Ingredient {
     constructor(ingredientName) {
         this.ingredientName = ingredientName;
     }

@@ -4,6 +4,7 @@
     "dayjs": "^1.11.13",
     "math": "npm:Math@^0.0.1-security",
     "Math": "^0.0.1-security",
+    "nodemon": "^3.1.9",
     "sqlite3": "^5.1.7"
   }
 }

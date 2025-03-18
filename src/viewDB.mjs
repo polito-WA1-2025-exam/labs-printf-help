@@ -3,7 +3,7 @@ import { promisify } from 'util';
 import Table from 'cli-table3';
 
 // Open database connection
-const db = new sqlite3.Database('testDB.db', (err) => {
+const db = new sqlite3.Database('../databases/testDB.db', (err) => {
     if (err) {
         console.error('Error opening database:', err.message);
     }
