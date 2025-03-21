@@ -1,8 +1,35 @@
 GET http://localhost:3000/
 
 ###
-
 GET http://localhost:3000/user
+
+###
+GET http://localhost:3000/user/email/s346317@studenti.polito.it/password/346317
+
+###
+POST http://localhost:3000/user
+Content-Type: application/json
+
+{ "username": "Andrea",
+  "email" : "s346317@studenti.polito.it",
+  "password" : "346317"}
+
+
+###
+POST http://localhost:3000/user
+Content-Type: application/json
+
+{ "username": "Tommaso",
+  "email" : "s346565@studenti.polito.it",
+  "password" : "346565"}
+
+###
+POST http://localhost:3000/user
+Content-Type: application/json
+
+{ "username": "Sam",
+  "email" : "s293382@studenti.polito.it",
+  "password" : "293382"}
 
 ###
 
@@ -19,3 +46,7 @@ PUT http://localhost:3000/users?name=Fulvio
 ###
 
 GET http://localhost:3000/user/20/name
+
+
+###
+GET http://localhost:3000/user

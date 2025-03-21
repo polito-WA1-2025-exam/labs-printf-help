@@ -37,7 +37,7 @@ async function displayTable(tableName) {
     // Create table format
     const cliTable = new Table({
         head: columnNames,
-        colWidths: columnNames.map(() => 20) // Adjust column width
+        colWidths: columnNames.map(() => 14) // Adjust column width
     });
 
     // Add rows to the table
