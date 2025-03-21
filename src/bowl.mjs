@@ -16,11 +16,23 @@ export class Bowl {
     }
 
     getProteins() {
-        return [...this.proteins];
+        let list = [];
+
+        this.proteins.forEach(protein => {
+            list.push(protein.getProtein());
+        });
+
+        return list;
     }
 
     getIngredients() {
-        return [...this.ingredients];
+        let list = [];
+
+        this.ingredients.forEach(ingredients => {
+            list.push(ingredients.getIngredient());
+        });
+
+        return list;
     }
 
     setSize(size) {
@@ -49,8 +61,8 @@ export class Bowl {
         console.log();
         console.log('Size: ' + this.getSize());
         console.log('Base: ' + this.getBase());
-        console.log('Proteins: ' + this.getProteins().map(protein => protein.getProtein()));
-        console.log('Ingredients: ' + this.getIngredients().map(ingredient => ingredient.getIngredient()));
+        console.log('Proteins: ' + this.getProteins());
+        console.log('Ingredients: ' + this.getIngredients());
     }
 
     toJSON() {
@@ -67,7 +79,7 @@ export class Bowl {
 class Size {
     constructor(sizeType) {
         this.sizeType = sizeType;
-        this.converter = { 3: 'L', 2: 'M', 1: 'S' };
+        this.converter = { 'L': 3, 'M': 2, 'S': 1 };
     }
 
     getSize() {
