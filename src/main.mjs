@@ -20,11 +20,11 @@ class Container {
 
     submitOrder(db) {
         return new Promise((resolve, reject) => {
-            const sql = `INSERT INTO orders (user_id, order_contents)
-                        VALUES (1, ?)`;    
+            const sql = `INSERT INTO bowlsPerOrder (userId, orderId, size, base, proteins, ingredients) 
+                        VALUES (1, 1, ?, ?, ?, ?)`;    
 
             this.orders.forEach(bowl => {
-                db.run(sql, JSON.stringify(bowl.toJSON()), function(err) {
+                db.run(sql, [bowl.getSize().getSize(), bowl.getBase(),  bowl.getProteins().toString(), bowl.getIngredients().toString()], function(err) {
                     if (err) {
                         reject(err);
                     }
@@ -54,9 +54,9 @@ const db = new sqlite.Database('../databases/testDB.db', (err) => {
 //     console.error(err);
 // });
 
-query.filterOrdersBySize(db, 'M').then((result) => {
-    console.log('Number of order matching the size: ' + result.length);
-    result.forEach(item => item.displayContents());
-}).catch(err => {
-    console.error(err);
-});
+// query.filterOrdersBySize(db, 'S').then((result) => {
+//     console.log('Number of order matching the size: ' + result.length);
+//     result.forEach(item => item.displayContents());
+// }).catch(err => {
+//     console.error(err);
+// });
