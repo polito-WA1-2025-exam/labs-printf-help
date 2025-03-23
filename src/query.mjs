@@ -214,3 +214,38 @@ export function listBowls (db) {
         });
     });
 }
+
+
+
+export function getBowlsByUser(db, field, value, password) {
+    return new Promise((resolve, reject) => {
+        const sql = `SELECT id FROM users WHERE ${field} = ? AND password = ?`;
+        db.get(sql, [value, password], (err, row) => {
+            if (err) {
+                reject(err);
+            } else if (row) {
+                const sql = `SELECT * FROM bowlsPerOrder WHERE userId = ?`;
+                db.all(sql, [row.id], (err, rows) => {
+                    if (err) {
+                        reject(err);
+                    } else {
+                        const result = rows.map(item => new Bowl(item.size, item.base, item.proteins, item.ingredients));
+                        resolve(result);
+                    }
+                });
+            } else {
+                resolve(null);
+            }
+        });
+        /*
+        db.get(sql, [value, password], (err, row) => {
+        if (err) {
+          reject(err);  // If there's an error with the query, reject the promise
+        } else if (row) {
+          resolve(row);  // User found, resolve the promise with the user data
+        } else {
+          resolve(null);  // No user found, resolve with null
+        }
+      });*/
+    });
+}

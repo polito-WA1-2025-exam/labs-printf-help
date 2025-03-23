@@ -129,8 +129,21 @@ GET http://localhost:3000/user/authenticate?username=Sam&password=password123
 ```http
 GET http://localhost:3000/bowls
 ```
++ **Get all bowls for a specific user:**  
+  _TODO: Given a username or email + password, return the user object._  
 
+  - **To get bowls of a user with a known email and password:**  
 
+```http
+GET http://localhost:3000/bowls/auth/user?email=admin@gmail.com&password=admin123
+```  
+
+  - **To get bowls of a user with a known username and password:**  
+```http
+GET http://localhost:3000/bowls/auth/user?username=admin&password=admin123
+```
+>returns error if the email/user don't exist or wrong password
+>returns empty list if no orders are made
 
 
 

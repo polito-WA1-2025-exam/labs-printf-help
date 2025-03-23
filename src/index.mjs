@@ -202,7 +202,41 @@ app.get('/user/authenticate', [
       });
   });
   
-
+  //get bowls by email or username
+  app.get('/bowls/auth/user', [
+    check('email').optional().isEmail().withMessage('Invalid email format'),
+    check('username').optional().isString().withMessage('Invalid username'),
+    check('password').isLength({ min: 8 }).withMessage('Password must be at least 8 characters')
+  ], (req, res) => {
+    const { email, username, password } = req.query;
+  
+    // Check validation errors
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+  
+    // Check if email or username is provided
+    if (!email && !username) {
+      return res.status(400).send('Email or username is required');
+    }
+  
+    const searchField = email ? 'email' : 'username';
+    const searchValue = email || username;
+  
+    query.getBowlsByUser(db, searchField, searchValue, password)
+      .then((user) => {
+        if (user) {
+          res.status(200).json(user);  // Successfully authenticated
+        } else {
+          res.status(401).send('Invalid credentials');  // Authentication failed
+        }
+      })
+      .catch((err) => {
+        console.error(err);
+        res.status(500).send('Internal Server Error');
+      });
+  });
 
 
 
