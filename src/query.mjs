@@ -165,6 +165,23 @@ export function delUser (db, user) {
     });
 }
 
+export function authenticateUser(db, field, value, password) {
+    return new Promise((resolve, reject) => {
+      const sql = `SELECT * FROM users WHERE ${field} = ? AND password = ?`;
+  
+      db.get(sql, [value, password], (err, row) => {
+        if (err) {
+          reject(err);  // If there's an error with the query, reject the promise
+        } else if (row) {
+          resolve(row);  // User found, resolve the promise with the user data
+        } else {
+          resolve(null);  // No user found, resolve with null
+        }
+      });
+    });
+  }
+
+
 /*
 export function listOrders (db) {
     return new Promise((resolve, reject) => {

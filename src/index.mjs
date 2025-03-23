@@ -1,5 +1,5 @@
 import express from 'express'
-import { check } from 'express-validator';
+import { validationResult, check } from 'express-validator';
 import morgan from 'morgan';
 import sqlite from 'sqlite3'
 
@@ -34,18 +34,6 @@ app.get('/user', (req, res) => {
     })
 });
 
-//get check
-app.get('/user/check', (req, res) => {
-    query.listUsers(db)
-    .then((result) => {
-        res.json(result)
-        res.status(200).end()
-    })
-    .catch((err) => {
-        console.error(err)
-        res.status(500).end()
-    })
-});
 
 app.get('/user/email/:email/password/:password', [
         check('email').isEmail()
@@ -72,8 +60,14 @@ app.get('/user/email/:email/password/:password', [
 app.post('/user', [
         check('username').isString(),
         check('email').isEmail(),
-        check('password').isLength({min: 8})
+        check('password').isLength({min: 8}).withMessage('Password must be at least 8 characters long')
     ], (req, res) => {
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+        // If there are validation errors, send a 400 Bad Request response with the errors
+        return res.status(400).json({ errors: errors.array() });
+    }
     const user = new User(req.body.username, req.body.email, req.body.password);
     
     query.addUser(db, user)
@@ -90,8 +84,15 @@ app.post('/user', [
 app.post('/user/check', [
     check('username').isString(),
     check('email').isEmail(),
-    check('password').isLength({ min: 8 })
+    check('password').isLength({ min: 8 }).withMessage('Password must be at least 8 characters long')
 ], (req, res) => {
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+        // If there are validation errors, send a 400 Bad Request response with the errors
+        return res.status(400).json({ errors: errors.array() });
+    }
+
     const user = new User(req.body.username, req.body.email, req.body.password);
 
     query.addUserWithCheck(db, user)
@@ -154,6 +155,53 @@ app.get('/bowls', (req, res) => {
         res.status(501).end()
     })
 });
+
+
+app.get('/user/authenticate', [
+    check('email').optional().isEmail().withMessage('Invalid email format'),
+    check('username').optional().isString().withMessage('Invalid username'),
+    check('password').isLength({ min: 8 }).withMessage('Password must be at least 8 characters')
+  ], (req, res) => {
+    const { email, username, password } = req.query;
+  
+    // Check validation errors
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+  
+    // Check if email or username is provided
+    if (!email && !username) {
+      return res.status(400).send('Email or username is required');
+    }
+  
+    const searchField = email ? 'email' : 'username';
+    const searchValue = email || username;
+  
+    query.authenticateUser(db, searchField, searchValue, password)
+      .then((user) => {
+        if (user) {
+          res.status(200).json(user);  // Successfully authenticated
+        } else {
+          res.status(401).send('Invalid credentials');  // Authentication failed
+        }
+      })
+      .catch((err) => {
+        console.error(err);
+        res.status(500).send('Internal Server Error');
+      });
+  });
+  
+
+
+
+
+
+
+
+
+
+
 
 app.get('/', (req, res) =>	res.send('Hello World!')) ;
 

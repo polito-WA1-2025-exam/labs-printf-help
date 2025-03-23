@@ -36,8 +36,8 @@ POST http://localhost:3000/user/check
 Content-Type: application/json
 
 { "username": "Sam",
-  "email" : "s293382@studenti.polito.it",
-  "password" : "293382"}
+  "email" : "test@mail.com",
+  "password" : "password123"}
 
 ### POST WITH CHECK user
 POST http://localhost:3000/user/check
@@ -65,6 +65,21 @@ Content-Type: application/json
   "password" : "293382"}
 
 
+### AUTH by email
+
+GET http://localhost:3000/user/authenticate?email=test@mail.com&password=password123
+
+### AUTH by username
+
+GET http://localhost:3000/user/authenticate?username=Sam&password=password123
+
+### AUTH by email WRONG 
+
+GET http://localhost:3000/user/authenticate?email=test@mail.com&password=password124
+
+### AUTH by username WRONG
+
+GET http://localhost:3000/user/authenticate?username=Sam&password=password124
 ###
 
 POST http://localhost:3000/user
