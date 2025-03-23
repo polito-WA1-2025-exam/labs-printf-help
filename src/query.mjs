@@ -145,8 +145,6 @@ export function addUserWithCheck(db, user) {
 }
 
 
-
-
 export function delUser (db, user) {
     return new Promise((resolve, reject) => {
         const sql = `DELETE FROM users
@@ -179,7 +177,7 @@ export function authenticateUser(db, field, value, password) {
         }
       });
     });
-  }
+}
 
 
 /*
@@ -202,13 +200,15 @@ export function listOrders (db) {
 export function listBowls (db) {
     return new Promise((resolve, reject) => {
         const sql = `SELECT * FROM bowlsPerOrder`;
-
+        
         db.all(sql, (err, rows) => {
             if (err) {
                 reject(err);
             }
             else {
+                console.log("rows: ", rows);
                 const result = rows.map(item => new Bowl(item.size, item.base, item.proteins, item.ingredients));
+                console.log("result: ", result);
                 resolve(result);
             }
         });

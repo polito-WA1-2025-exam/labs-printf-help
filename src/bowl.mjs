@@ -1,10 +1,17 @@
 // BOWL CLASS
 export class Bowl {
-    constructor() {
-        this.size = null; // Size of the bowl
-        this.base = null; // Base of the bowl
-        this.proteins = []; // List of proteins in the bowl
-        this.ingredients = []; // List of ingredients in the bowl
+    constructor(size, base, proteins, ingredients) {
+        this.size = size; // Size of the bowl
+        this.base = base; // Base of the bowl
+        // Handle both string and array inputs for proteins
+        this.proteins = typeof proteins === 'string' 
+        ? proteins.split(",") 
+        : proteins; 
+
+        // Handle both string and array inputs for ingredients
+        this.ingredients = typeof ingredients === 'string' 
+        ? ingredients.split(",") 
+        : ingredients; 
     }
 
     getSize() {
@@ -65,12 +72,20 @@ export class Bowl {
         console.log('Ingredients: ' + this.getIngredients());
     }
 
+    // toJSON() {
+    //     return {
+    //         size: this.size ? this.size.getSize() : null,
+    //         base: this.base ? this.base.getBase() : null,
+    //         proteins: this.proteins.map(p => p.getProtein()),
+    //         ingredients: this.ingredients.map(i => i.getIngredient())
+    //     };
+    //}
     toJSON() {
         return {
-            size: this.size ? this.size.getSize() : null,
-            base: this.base ? this.base.getBase() : null,
-            proteins: this.proteins.map(p => p.getProtein()),
-            ingredients: this.ingredients.map(i => i.getIngredient())
+            size: this.size,
+            base: this.base,
+            proteins: this.proteins,
+            ingredients: this.ingredients
         };
     }
 }

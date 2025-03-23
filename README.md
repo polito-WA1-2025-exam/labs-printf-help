@@ -89,8 +89,8 @@ Content-Type: application/json
 "password": "admin123"
 }
 ```
-    might raise errors if: password is shorter than 8, username or email already used. (the email and user check is only availlable at **/user/check**).
-* **delete User:**
+> might raise errors if: password is shorter than 8, username or email already used. (the email and user check is only availlable at **/user/check**).
++ **delete User:**
 delete a user from the database ONLY if all the parameters are correct (user, email and password):
 ```http
 DELETE  http://localhost:3000/user
@@ -102,7 +102,8 @@ Content-Type: application/json
 "password": "admin123"
 }
 ```
-    might raise errors if the user is not found or it has incorrect parameters.
+
+>might raise errors if the user is not found or it has incorrect parameters.
 
 + **get all users:**
 //TODO implement password check ?
@@ -113,15 +114,26 @@ GET http://localhost:3000/user
   _TODO: Given a username or email + password, return the user object._  
 
   - **To get a user with a known email and password:**  
-    ```http
-    GET http://localhost:3000/user/authenticate?email=test@mail.com&password=password123
-    ```  
+
+```http
+GET http://localhost:3000/user/authenticate?email=test@mail.com&password=password123
+```  
 
   - **To get a user with a known username and password:**  
-    ```http
-    GET http://localhost:3000/user/authenticate?username=Sam&password=password123
-    ```
+```http
+GET http://localhost:3000/user/authenticate?username=Sam&password=password123
+```
+>returns error if the email/user don't exist or wrong password
++ **get all bowls:**
+//TODO implement password check ?
+```http
+GET http://localhost:3000/bowls
+```
 
 
-    ----
-    (you mayupdate this file to keep track of the progress of your group work, throughout the weeks)
+
+
+
+
+----
+(you mayupdate this file to keep track of the progress of your group work, throughout the weeks)

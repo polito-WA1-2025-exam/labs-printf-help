@@ -82,19 +82,11 @@ GET http://localhost:3000/user/authenticate?email=test@mail.com&password=passwor
 GET http://localhost:3000/user/authenticate?username=Sam&password=password124
 ###
 
-POST http://localhost:3000/user
-Content-Type: application/json
 
-{ "name": "Jim", "id":99 }
 
 ### 
 
-PUT http://localhost:3000/users?name=Fulvio
-
-
-###
-
-GET http://localhost:3000/user/20/name
+GET http://localhost:3000/bowls
 
 
 ###

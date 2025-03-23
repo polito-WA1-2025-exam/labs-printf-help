@@ -144,18 +144,28 @@ app.delete('/user', [
     });
 });
 
+// app.get('/bowls', (req, res) => {
+//     query.listBowls(db)
+//     .then((result) => {
+//         result.forEach(item => console.log(JSON.stringify(item)));
+//         res.status(200).end()
+//     })
+//     .catch((err) => {
+//         console.error(err)
+//         res.status(501).end()
+//     })
+// });
 app.get('/bowls', (req, res) => {
     query.listBowls(db)
     .then((result) => {
-        result.forEach(item => console.log(JSON.stringify(item)));
+        res.json(result)
         res.status(200).end()
     })
     .catch((err) => {
         console.error(err)
-        res.status(501).end()
+        res.status(500).end()
     })
 });
-
 
 app.get('/user/authenticate', [
     check('email').optional().isEmail().withMessage('Invalid email format'),
