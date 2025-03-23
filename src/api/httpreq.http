@@ -31,6 +31,40 @@ Content-Type: application/json
   "email" : "s293382@studenti.polito.it",
   "password" : "293382"}
 
+### POST WITH CHECK starter
+POST http://localhost:3000/user/check
+Content-Type: application/json
+
+{ "username": "Sam",
+  "email" : "s293382@studenti.polito.it",
+  "password" : "293382"}
+
+### POST WITH CHECK user
+POST http://localhost:3000/user/check
+Content-Type: application/json
+
+{ "username": "Sam",
+  "email" : "bananita@studenti.polito.it",
+  "password" : "293382"}
+### POST WITH CHECK mail
+POST http://localhost:3000/user/check
+Content-Type: application/json
+
+{ "username": "bananita",
+  "email" : "s293382@studenti.polito.it",
+  "password" : "293382"}
+
+
+
+### DELETE
+DELETE  http://localhost:3000/user
+Content-Type: application/json
+
+{ "username": "Sam",
+  "email" : "bananita@studenti.polito.it",
+  "password" : "293382"}
+
+
 ###
 
 POST http://localhost:3000/user

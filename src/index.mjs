@@ -34,6 +34,19 @@ app.get('/user', (req, res) => {
     })
 });
 
+//get check
+app.get('/user/check', (req, res) => {
+    query.listUsers(db)
+    .then((result) => {
+        res.json(result)
+        res.status(200).end()
+    })
+    .catch((err) => {
+        console.error(err)
+        res.status(500).end()
+    })
+});
+
 app.get('/user/email/:email/password/:password', [
         check('email').isEmail()
     ], (req, res) => {
@@ -72,6 +85,62 @@ app.post('/user', [
         console.error(err)
         res.status(500).end()
     })
+});
+
+app.post('/user/check', [
+    check('username').isString(),
+    check('email').isEmail(),
+    check('password').isLength({ min: 8 })
+], (req, res) => {
+    const user = new User(req.body.username, req.body.email, req.body.password);
+
+    query.addUserWithCheck(db, user)
+    .then(() => {
+        console.log('User added successfully');
+        res.status(201).send('User created');
+    })
+    .catch((err) => {
+        console.error(err);
+        
+        // Check for specific error messages and return appropriate response
+        if (err.message === 'Username already taken') {
+            res.status(409).send('Username already taken');
+        } else if (err.message === 'Email already in use') {
+            res.status(409).send('Email already in use');
+        } else {
+            res.status(500).send('Internal Server Error');
+        }
+    });
+});
+
+
+
+
+
+
+
+app.delete('/user', [
+    check('username').isString(),
+    check('email').isEmail(),
+    check('password').isLength({min: 8})
+    ], (req, res) => {
+    const user = new User(req.body.username, req.body.email, req.body.password);
+
+    query.delUser(db, user)
+    .then(() => {
+        console.log('User deleted successfully');
+        res.status(200).end()
+    })
+    .catch((err) => {
+        console.error(err);
+        
+        // Check for specific error messages and return them to the client
+        if (err.message === 'User not found or parameters are incorrect') {
+            res.status(404).send('User not found or incorrect parameters');
+        } else {
+            res.status(500).send('Internal Server Error');
+        }
+    });
 });
 
 app.get('/bowls', (req, res) => {

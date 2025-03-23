@@ -108,6 +108,63 @@ export function addUser (db, user) {
     });
 }
 
+export function addUserWithCheck(db, user) {
+    return new Promise((resolve, reject) => {
+        // Check if the username already exists
+        const checkUsernameSql = `SELECT 1 FROM users WHERE username = ? LIMIT 1`;
+        db.get(checkUsernameSql, [user.getUsername()], (err, row) => {
+            if (err) {
+                reject(err);
+            } else if (row) {
+                // If a row is returned, the username already exists
+                reject(new Error('Username already taken'));
+            } else {
+                // If the username is available, check if the email already exists
+                const checkEmailSql = `SELECT 1 FROM users WHERE email = ? LIMIT 1`;
+                db.get(checkEmailSql, [user.getEmail()], (err, row) => {
+                    if (err) {
+                        reject(err);
+                    } else if (row) {
+                        // If a row is returned, the email already exists
+                        reject(new Error('Email already in use'));
+                    } else {
+                        // Insert the new user if both username and email are available
+                        const insertSql = `INSERT INTO users (username, email, password) VALUES (?, ?, ?)`;
+                        db.run(insertSql, [user.getUsername(), user.getEmail(), user.getPassword()], function(err) {
+                            if (err) {
+                                reject(err);
+                            } else {
+                                resolve();  // Successfully added the user
+                            }
+                        });
+                    }
+                });
+            }
+        });
+    });
+}
+
+
+
+
+export function delUser (db, user) {
+    return new Promise((resolve, reject) => {
+        const sql = `DELETE FROM users
+                     WHERE username = ? AND email = ? AND password = ?`;
+
+        db.run(sql, [user.getUsername(), user.getEmail(), user.getPassword()], function(err) {
+            if (err) {
+                reject(err);
+            } else if (this.changes === 0) {
+                // If no rows were deleted, that means the user does not exist
+                reject(new Error('User not found or parameters are incorrect'));
+            }else {
+                resolve();
+            }
+        });
+    });
+}
+
 /*
 export function listOrders (db) {
     return new Promise((resolve, reject) => {
