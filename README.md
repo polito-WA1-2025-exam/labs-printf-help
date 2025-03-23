@@ -6,6 +6,8 @@
 - s346317 UGLIANO ANDREA
 - s293382 VIANELLO SAMUELE
 
+# FOR NODE MODULES:
+run `npm install` or `npm.cmd install` to check if you have all the necessary modules, `npm update` or `npm.cmd update` to update all existing modules to the newest version.
 
 # Exercise "Poke"
 

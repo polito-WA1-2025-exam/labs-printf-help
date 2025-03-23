@@ -3,6 +3,7 @@
     "cli-table3": "^0.6.5",
     "dayjs": "^1.11.13",
     "express": "^4.21.2",
+    "express-validator": "^7.2.1",
     "math": "npm:Math@^0.0.1-security",
     "Math": "^0.0.1-security",
     "morgan": "^1.10.0",
