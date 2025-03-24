@@ -315,3 +315,50 @@ export function delOrder(db, id) {
         });
     });
 }
+
+export function addBowl(db, bowl, userId, orderId) {
+    return new Promise((resolve, reject) => {
+        const sql = `INSERT INTO bowlsPerOrder (userId, orderId, size, base, proteins, ingredients, price) 
+                    VALUES (?, ?, ?, ?, ?, ?, ?)`;
+
+        db.run(sql, [userId, orderId, bowl.getSize(), bowl.getBase(), bowl.toString("proteins"), bowl.toString("ingredients"), bowl.getPrice()], function(err) {
+            if (err) {
+                reject(err);
+            }
+            else {
+                resolve();
+            }
+        });
+    });S
+}
+
+export function delBowl(db, id) {
+    return new Promise((resolve, reject) => {
+        const sql = `DELETE FROM bowlsPerOrder WHERE id = ?`;
+        db.run(sql, [id], function(err) {
+            if (err) {
+                reject(err);
+            } else if (this.changes === 0) {
+                reject(new Error('Bowl not found'));
+            } else {
+                resolve();
+            }
+        });
+    });
+}
+
+export function delBowlByOrder(db, id) {
+    return new Promise((resolve, reject) => {
+        const sql = `DELETE FROM bowlsPerOrder WHERE orderId = ?`;
+        console.log("id: ", id);
+        db.run(sql, [id], function(err) {
+            if (err) {
+                reject(err);
+            } else if (this.changes === 0) {
+                reject(new Error('Order not found'));
+            } else {
+                resolve();
+            }
+        });
+    });
+}

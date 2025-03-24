@@ -1,6 +1,6 @@
 // BOWL CLASS
 export class Bowl {
-    constructor(size, base, proteins, ingredients) {
+    constructor(size, base, proteins, ingredients, price) {
         this.size = size; // Size of the bowl
         this.base = base; // Base of the bowl
         // Handle both string and array inputs for proteins
@@ -11,15 +11,19 @@ export class Bowl {
         // Handle both string and array inputs for ingredients
         this.ingredients = typeof ingredients === 'string' 
         ? ingredients.split(",") 
-        : ingredients; 
+        : ingredients;
+        this.price = price;
     }
 
+    getPrice() {
+        return this.price;
+    }
     getSize() {
-        return this.size.getSize();
+        return this.size; //.getSize();
     }
 
     getBase() {
-        return this.base.getBase();
+        return this.base; //.getBase();
     }
 
     getProteins() {
@@ -40,6 +44,10 @@ export class Bowl {
         });
 
         return list;
+    }
+
+    setPrice(price) {
+        this.price = price;
     }
 
     setSize(size) {
@@ -87,6 +95,14 @@ export class Bowl {
             proteins: this.proteins,
             ingredients: this.ingredients
         };
+    }
+    toString(choice) {
+        if (choice === "proteins") {
+            return this.proteins.join(",");
+        }else if (choice === "ingredients") {
+            return this.ingredients.join(",");
+        }
+        else return null;
     }
 }
 

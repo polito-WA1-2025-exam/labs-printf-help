@@ -6,6 +6,7 @@ import sqlite from 'sqlite3'
 import * as query from './query.mjs';
 import { User } from './user.mjs';
 import { Order } from './order.mjs';
+import { Bowl } from './bowl.mjs';
 
 const app = express() ;
 const port = 3000;
@@ -307,6 +308,75 @@ app.delete('/orders/:id', (req, res) => {
     })
 });
 
+app.post("/bowls", [
+    check('userId').isNumeric(),
+    check('price').isNumeric(),
+    check('orderId').isNumeric()
+    ], (req, res) => {
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+        // If there are validation errors, send a 400 Bad Request response with the errors
+        return res.status(400).json({ errors: errors.array() });
+    }
+    const bowl = new Bowl(req.body.size, req.body.base, req.body.proteins, req.body.ingredients, req.body.price);
+    
+    console.log(req.body.userId);
+    console.log(req.body.orderId);
+    console.log(bowl);
+    query.addBowl(db, bowl, req.body.userId, req.body.orderId)
+    .then(() => {
+        console.log("Bowl added successfully");
+        res.status(200).end();
+    })
+    .catch((err) => {
+        console.error(err);
+        res.status(500).end();
+    });
+});
+
+app.delete('/bowls/:id', (req, res) => {
+    const id = req.params.id;
+
+    query.delBowl(db, id)
+    .then(() => {
+        console.log('Bowl deleted successfully');
+        res.status(200).end()
+    })
+    .catch((err) => {
+        console.error(err)
+        if (err.message === 'Bowl not found') {
+            res.status(404).send('Bowl not found');
+        } else {
+            res.status(500).send('Internal Server Error');
+        }
+        
+    })
+});
+
+
+app.delete('/bowls/orders/:userId', (req, res) => {
+    const userId = req.params.userId;
+    query.delBowlByOrder(db, userId)
+    .then(() => {
+        console.log('Bowls deleted successfully');
+        res.status(200).end()
+    })
+    .catch((err) => {
+        console.error(err)
+        if (err.message === 'Order not found') {
+            res.status(404).send('Order not found');
+        } else {
+            res.status(500).send('Internal Server Error');
+        }
+        
+    })
+});
+
+
+
+
+
 
 
 
@@ -329,3 +399,5 @@ app.listen(port, () =>	console.log('Server	ready')) ;
 // })
 
 // // Activate server
+
+

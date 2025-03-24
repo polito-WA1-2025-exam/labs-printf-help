@@ -133,3 +133,27 @@ Content-Type: application/json
 # DELETE ORDER BY ID
 
 DELETE http://localhost:3000/orders/1
+
+
+# CREATE BOWL
+
+POST http://localhost:3000/bowls
+Content-Type: application/json
+
+{
+ "userId": 1,
+ "orderId": 2,
+ "size": "S",
+ "base": "Rice",
+ "proteins": "Chicken,Salmon",
+ "ingredients": "Tomato,Cucumber,Onion",
+ "price": 5.5
+ }
+
+# DELETE BOWL BY ID
+
+DELETE http://localhost:3000/bowls/4
+
+# DELETE BOWL BY USERID
+
+DELETE http://localhost:3000/bowls/orders/4

@@ -181,6 +181,39 @@ DELETE http://localhost:3000/orders/orderID
 ```
 >if the order ID is not present returns error message
 
++ **add a bowl:**
+adds a bowl given the proper parameters
+```http
+POST http://localhost:3000/bowls
+Content-Type: application/json
+
+{
+ "userId": INTEGER,
+ "orderId": INTEGER,
+ "size": S,M,L,
+ "base": "Rice",
+ "proteins": "Chicken,Salmon" or ["chicken",...],
+ "ingredients": "Tomato,Cucumber,Onion",
+ "price": 2 decimals float
+ }
+```
+>may raise errors if the userId, orderId or price are not numbers
+
+
++ **Delete bowl by bowl ID:**
+given the bowl Id deletes the element from database
+```http
+DELETE http://localhost:3000/bowls/:bowlId
+```
+>raises error if the bowl id is not found
++ **Delete bowl by OrderId:**
+given the order ID deletes all the bowls from that order
+```http
+DELETE http://localhost:3000/bowls/orders/:orderId
+```
+>raiser error if the orderId is not found
+
+
 # TODO:
 b ) add:
 - get by specific characteristics
