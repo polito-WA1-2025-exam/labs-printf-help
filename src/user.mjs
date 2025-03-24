@@ -5,7 +5,7 @@ export class User {
         this.username = username; // Username of the user
         this.email = email; // Email of the user
         this.password = password; // Password of the user
-        this.creationDate = dayjs(this.creationDate).format('YYYY-MM-DD'); // Date of the user creation
+        this.creationDate = creationDate ? creationDate : dayjs().format('YYYY-MM-DD'); // Date of the user creation if not passed is automaticcally assigne as current daye
     }
 
     getUsername() {

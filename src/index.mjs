@@ -239,9 +239,29 @@ app.get('/user/authenticate', [
   });
 
 
+  app.get('/orders', (req, res) => {
+    query.listOrders(db)
+    .then((result) => {
+        res.json(result)
+        res.status(200).end()
+    })
+    .catch((err) => {
+        console.error(err)
+        res.status(500).end()
+    })
+});
 
-
-
+app.get('/orders/discounts', (req, res) => {
+    query.listDiscountedOrders(db)
+    .then((result) => {
+        res.json(result)
+        res.status(200).end()
+    })
+    .catch((err) => {
+        console.error(err)
+        res.status(500).end()
+    })
+});
 
 
 

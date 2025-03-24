@@ -94,3 +94,12 @@ GET http://localhost:3000/bowls/auth/user?username=admin&password=admin123
 GET http://localhost:3000/bowls/auth/user?email=admin@gmail.com&password=admin123
 ###
 GET http://localhost:3000/user
+
+### GET ALL ORDERS
+
+GET http://localhost:3000/orders
+
+
+### GET ALL DISCOUNTED ORDERS
+
+GET http://localhost:3000/orders/discounts

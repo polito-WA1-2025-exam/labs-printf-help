@@ -1,5 +1,6 @@
 import {Bowl} from "./bowl.mjs";
 import {User} from "./user.mjs";
+import { Order } from "./order.mjs";
 
 export function displayOrders(db) {
     return new Promise((resolve, reject) => {
@@ -216,6 +217,40 @@ export function listBowls (db) {
 }
 
 
+export function listOrders (db) {
+    return new Promise((resolve, reject) => {
+        const sql = `SELECT * FROM orders`;
+        
+        db.all(sql, (err, rows) => {
+            if (err) {
+                reject(err);
+            }
+            else {
+                console.log("rows: ", rows);
+                const result = rows.map(item => new Order(item.id, item.userID, item.orderDate, item.total, item.appliedDiscount));
+                console.log("result: ", result);
+                resolve(result);
+            }
+        });
+    });
+}
+export function listDiscountedOrders (db) {
+    return new Promise((resolve, reject) => {
+        const sql = `SELECT * FROM orders WHERE appliedDiscount = 'TRUE'`;
+        //TODO: fix the database: boolean values are stored as strings
+        db.all(sql, (err, rows) => {
+            if (err) {
+                reject(err);
+            }
+            else {
+                console.log("rows: ", rows);
+                const result = rows.map(item => new Order(item.id, item.userID, item.orderDate, item.total, item.appliedDiscount));
+                console.log("result: ", result);
+                resolve(result);
+            }
+        });
+    });
+}
 
 export function getBowlsByUser(db, field, value, password) {
     return new Promise((resolve, reject) => {

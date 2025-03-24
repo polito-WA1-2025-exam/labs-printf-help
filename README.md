@@ -145,7 +145,17 @@ GET http://localhost:3000/bowls/auth/user?username=admin&password=admin123
 >returns error if the email/user don't exist or wrong password
 >returns empty list if no orders are made
 
-
++ **get all orders:**
+//TODO implement password check ?
+```http
+GET http://localhost:3000/orders
+```
++ **get all discounted orders:**
++ **get all bowls:**
+//TODO implement password check ?
+```http
+GET http://localhost:3000/orders/discounts
+```
 
 
 ----
