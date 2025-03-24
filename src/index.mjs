@@ -2,6 +2,7 @@ import express from 'express'
 import { validationResult, check } from 'express-validator';
 import morgan from 'morgan';
 import sqlite from 'sqlite3'
+import bcrypt from 'bcryptjs';
 
 import * as query from './query.mjs';
 import { User } from './user.mjs';
@@ -22,6 +23,8 @@ const db = new sqlite.Database('../databases/testDB.db', (err) => {
 app.use(express.json())
 app.use(morgan('dev'))
 
+// At some point we should change to loading this key from an env. variable
+const SECRET_KEY = "secret-key";
 
 // Define routes and web pages
 app.get('/user', (req, res) => {
@@ -63,14 +66,16 @@ app.post('/user', [
         check('username').isString(),
         check('email').isEmail(),
         check('password').isLength({min: 8}).withMessage('Password must be at least 8 characters long')
-    ], (req, res) => {
+    ], async (req, res) => {
     const errors = validationResult(req);
 
     if (!errors.isEmpty()) {
         // If there are validation errors, send a 400 Bad Request response with the errors
         return res.status(400).json({ errors: errors.array() });
     }
-    const user = new User(req.body.username, req.body.email, req.body.password);
+
+    const hashedPassword = await bcrypt.hash(req.body.password, 10);
+    const user = new User(req.body.username, req.body.email, hashedPassword);   
     
     query.addUser(db, user)
     .then(() => {
@@ -87,7 +92,7 @@ app.post('/user/check', [
     check('username').isString(),
     check('email').isEmail(),
     check('password').isLength({ min: 8 }).withMessage('Password must be at least 8 characters long')
-], (req, res) => {
+], async (req, res) => {
     const errors = validationResult(req);
 
     if (!errors.isEmpty()) {
@@ -95,7 +100,8 @@ app.post('/user/check', [
         return res.status(400).json({ errors: errors.array() });
     }
 
-    const user = new User(req.body.username, req.body.email, req.body.password);
+    const hashedPassword = await bcrypt.hash(req.body.password, 10);
+    const user = new User(req.body.username, req.body.email, hashedPassword);
 
     query.addUserWithCheck(db, user)
     .then(() => {
@@ -173,7 +179,7 @@ app.get('/user/authenticate', [
     check('email').optional().isEmail().withMessage('Invalid email format'),
     check('username').optional().isString().withMessage('Invalid username'),
     check('password').isLength({ min: 8 }).withMessage('Password must be at least 8 characters')
-  ], (req, res) => {
+  ], async (req, res) => {
     const { email, username, password } = req.query;
   
     // Check validation errors
@@ -189,19 +195,23 @@ app.get('/user/authenticate', [
   
     const searchField = email ? 'email' : 'username';
     const searchValue = email || username;
-  
-    query.authenticateUser(db, searchField, searchValue, password)
-      .then((user) => {
-        if (user) {
-          res.status(200).json(user);  // Successfully authenticated
-        } else {
-          res.status(401).send('Invalid credentials');  // Authentication failed
+
+    try {
+        // Try fetching user details from the database
+        const user = await query.authenticateUser(db, searchField, searchValue);
+
+        // Compare provided password with the hashed password in db
+        if (!await bcrypt.compare(password, user.password)) {
+            return res.status(401).send('Invalid credentials');
         }
-      })
-      .catch((err) => {
+
+        // Successfully authenticated
+        res.status(200).json(user);
+        
+    } catch (err) {
         console.error(err);
         res.status(500).send('Internal Server Error');
-      });
+    }
   });
   
   //get bowls by email or username
