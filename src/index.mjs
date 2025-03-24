@@ -23,7 +23,12 @@ app.use(express.json())
 app.use(morgan('dev'))
 
 
-// Define routes and web pages
+/*-------------------------------------------*/
+//                USER ROUTES
+/*-------------------------------------------*/
+
+// user list retrieval
+
 app.get('/user', (req, res) => {
     query.listUsers(db)
     .then((result) => {
@@ -36,6 +41,7 @@ app.get('/user', (req, res) => {
     })
 });
 
+// user retrieval by email and password
 
 app.get('/user/email/:email/password/:password', [
         check('email').isEmail()
@@ -58,6 +64,43 @@ app.get('/user/email/:email/password/:password', [
         res.status(500).end()
     })
 });
+
+app.get('/user/authenticate', [
+    check('email').optional().isEmail().withMessage('Invalid email format'),
+    check('username').optional().isString().withMessage('Invalid username'),
+    check('password').isLength({ min: 8 }).withMessage('Password must be at least 8 characters')
+  ], (req, res) => {
+    const { email, username, password } = req.query;
+  
+    // Check validation errors
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+  
+    // Check if email or username is provided
+    if (!email && !username) {
+      return res.status(400).send('Email or username is required');
+    }
+  
+    const searchField = email ? 'email' : 'username';
+    const searchValue = email || username;
+  
+    query.authenticateUser(db, searchField, searchValue, password)
+      .then((user) => {
+        if (user) {
+          res.status(200).json(user);  // Successfully authenticated
+        } else {
+          res.status(401).send('Invalid credentials');  // Authentication failed
+        }
+      })
+      .catch((err) => {
+        console.error(err);
+        res.status(500).send('Internal Server Error');
+      });
+  });
+
+// creation of a new user
 
 app.post('/user', [
         check('username').isString(),
@@ -146,17 +189,10 @@ app.delete('/user', [
     });
 });
 
-// app.get('/bowls', (req, res) => {
-//     query.listBowls(db)
-//     .then((result) => {
-//         result.forEach(item => console.log(JSON.stringify(item)));
-//         res.status(200).end()
-//     })
-//     .catch((err) => {
-//         console.error(err)
-//         res.status(501).end()
-//     })
-// });
+/*-------------------------------------------*/
+//                ORDER ROUTES
+/*-------------------------------------------*/
+
 app.get('/bowls', (req, res) => {
     query.listBowls(db)
     .then((result) => {
@@ -168,41 +204,6 @@ app.get('/bowls', (req, res) => {
         res.status(500).end()
     })
 });
-
-app.get('/user/authenticate', [
-    check('email').optional().isEmail().withMessage('Invalid email format'),
-    check('username').optional().isString().withMessage('Invalid username'),
-    check('password').isLength({ min: 8 }).withMessage('Password must be at least 8 characters')
-  ], (req, res) => {
-    const { email, username, password } = req.query;
-  
-    // Check validation errors
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
-    }
-  
-    // Check if email or username is provided
-    if (!email && !username) {
-      return res.status(400).send('Email or username is required');
-    }
-  
-    const searchField = email ? 'email' : 'username';
-    const searchValue = email || username;
-  
-    query.authenticateUser(db, searchField, searchValue, password)
-      .then((user) => {
-        if (user) {
-          res.status(200).json(user);  // Successfully authenticated
-        } else {
-          res.status(401).send('Invalid credentials');  // Authentication failed
-        }
-      })
-      .catch((err) => {
-        console.error(err);
-        res.status(500).send('Internal Server Error');
-      });
-  });
   
   //get bowls by email or username
   app.get('/bowls/auth/user', [

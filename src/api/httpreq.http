@@ -1,35 +1,22 @@
 GET http://localhost:3000/
 
-###
+##############################################
+#                  USER API                  #
+##############################################
+
+### Retrieve the list of all users
 GET http://localhost:3000/user
 
-###
+### Retrive a user by username and password
 GET http://localhost:3000/user/email/s346317@studenti.polito.it/password/346317
 
-###
+### Create a new user
 POST http://localhost:3000/user
 Content-Type: application/json
 
 { "username": "Andrea",
   "email" : "s346317@studenti.polito.it",
   "password" : "346317"}
-
-
-###
-POST http://localhost:3000/user
-Content-Type: application/json
-
-{ "username": "Tommaso",
-  "email" : "s346565@studenti.polito.it",
-  "password" : "346565"}
-
-###
-POST http://localhost:3000/user
-Content-Type: application/json
-
-{ "username": "Sam",
-  "email" : "s293382@studenti.polito.it",
-  "password" : "293382"}
 
 ### POST WITH CHECK starter
 POST http://localhost:3000/user/check
@@ -82,7 +69,9 @@ GET http://localhost:3000/user/authenticate?email=test@mail.com&password=passwor
 GET http://localhost:3000/user/authenticate?username=Sam&password=password124
 ###
 
-
+##############################################
+#                  ORDER API                 #
+##############################################
 
 ### GET ALL BOWLS
 

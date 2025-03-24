@@ -26,32 +26,11 @@ export function displayOrders(db) {
     });
 }
 
-export function filterOrdersBySize(db, size) {
-    return new Promise((resolve, reject) => {
-        const sql = `SELECT * 
-                    FROM bowlsPerOrder
-                    WHERE size = ?`;
-        db.all(sql, [size], (err, rows) => {
-            if (err) {
-                reject(err);
-            } 
-            else {
-                const result = rows.map(item => {
-                    const bowl = new Bowl();
+/*-------------------------------------------*/
+//               USER QUERIES
+/*-------------------------------------------*/
 
-                    bowl.setSize(item.size);
-                    bowl.setBase(item.base);
-                    bowl.setProteins(item.proteins.split(','));
-                    bowl.setIngredients(item.ingredients.split(','));
-
-                    return bowl;
-                })
-
-                resolve(result);
-            }
-        });
-    });
-}
+// user list retrieval
 
 export function listUsers (db) {
     return new Promise((resolve, reject) => {
@@ -69,6 +48,8 @@ export function listUsers (db) {
         });
     });
 }
+
+// user retrieval by email and password
 
 export function findUserByEmailAndPassword (db, email, password) {
     return new Promise((resolve, reject) => {
@@ -93,37 +74,23 @@ export function findUserByEmailAndPassword (db, email, password) {
     })
 }
 
-export function addUser (db, user) {
+export function authenticateUser(db, field, value, password) {
     return new Promise((resolve, reject) => {
-        const sql = `INSERT INTO users (username, email, password) 
-                    VALUES (?, ?, ?)`;
-
-        db.run(sql, [user.getUsername(), user.getEmail(), user.getPassword()], function(err) {
-            if (err) {
-                reject(err);
-            }
-            else {
-                resolve();
-            }
-        });
+      const sql = `SELECT * FROM users WHERE ${field} = ? AND password = ?`;
+  
+      db.get(sql, [value, password], (err, row) => {
+        if (err) {
+          reject(err);  // If there's an error with the query, reject the promise
+        } else if (row) {
+          resolve(row);  // User found, resolve the promise with the user data
+        } else {
+          resolve(null);  // No user found, resolve with null
+        }
+      });
     });
 }
 
-export function addOrder (db, order) {
-    return new Promise((resolve, reject) => {
-        const sql = `INSERT INTO orders (userID, total, appliedDiscount) 
-                    VALUES (?, ?, ?)`;
-        console.log("order: ", order.getAppliedDiscount());
-        db.run(sql, [order.getUserID(), order.getTotal(), order.getAppliedDiscount()], function(err) {
-            if (err) {
-                reject(err);
-            }
-            else {
-                resolve();
-            }
-        });
-    });
-}
+// creation of a new user
 
 export function addUserWithCheck(db, user) {
     return new Promise((resolve, reject) => {
@@ -161,6 +128,37 @@ export function addUserWithCheck(db, user) {
     });
 }
 
+export function addUser (db, user) {
+    return new Promise((resolve, reject) => {
+        const sql = `INSERT INTO users (username, email, password) 
+                    VALUES (?, ?, ?)`;
+
+        db.run(sql, [user.getUsername(), user.getEmail(), user.getPassword()], function(err) {
+            if (err) {
+                reject(err);
+            }
+            else {
+                resolve();
+            }
+        });
+    });
+}
+
+export function addOrder (db, order) {
+    return new Promise((resolve, reject) => {
+        const sql = `INSERT INTO orders (userID, total, appliedDiscount) 
+                    VALUES (?, ?, ?)`;
+        console.log("order: ", order.getAppliedDiscount());
+        db.run(sql, [order.getUserID(), order.getTotal(), order.getAppliedDiscount()], function(err) {
+            if (err) {
+                reject(err);
+            }
+            else {
+                resolve();
+            }
+        });
+    });
+}
 
 export function delUser (db, user) {
     return new Promise((resolve, reject) => {
@@ -179,40 +177,6 @@ export function delUser (db, user) {
         });
     });
 }
-
-export function authenticateUser(db, field, value, password) {
-    return new Promise((resolve, reject) => {
-      const sql = `SELECT * FROM users WHERE ${field} = ? AND password = ?`;
-  
-      db.get(sql, [value, password], (err, row) => {
-        if (err) {
-          reject(err);  // If there's an error with the query, reject the promise
-        } else if (row) {
-          resolve(row);  // User found, resolve the promise with the user data
-        } else {
-          resolve(null);  // No user found, resolve with null
-        }
-      });
-    });
-}
-
-
-/*
-export function listOrders (db) {
-    return new Promise((resolve, reject) => {
-        const sql = `SELECT * FROM orders`;
-
-        db.all(sql, (err, rows) => {
-            if (err) {
-                reject(err);
-            }
-            else {
-                const result = rows.map(item => new Order(item.id, item.user, item.email, item.password, item.created_at));
-                resolve(result);
-            }
-        });
-    });
-}*/
 
 export function listBowls (db) {
     return new Promise((resolve, reject) => {
