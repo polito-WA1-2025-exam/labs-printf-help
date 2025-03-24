@@ -109,6 +109,22 @@ export function addUser (db, user) {
     });
 }
 
+export function addOrder (db, order) {
+    return new Promise((resolve, reject) => {
+        const sql = `INSERT INTO orders (userID, total, appliedDiscount) 
+                    VALUES (?, ?, ?)`;
+        console.log("order: ", order.getAppliedDiscount());
+        db.run(sql, [order.getUserID(), order.getTotal(), order.getAppliedDiscount()], function(err) {
+            if (err) {
+                reject(err);
+            }
+            else {
+                resolve();
+            }
+        });
+    });
+}
+
 export function addUserWithCheck(db, user) {
     return new Promise((resolve, reject) => {
         // Check if the username already exists
@@ -227,7 +243,7 @@ export function listOrders (db) {
             }
             else {
                 console.log("rows: ", rows);
-                const result = rows.map(item => new Order(item.id, item.userID, item.orderDate, item.total, item.appliedDiscount));
+                const result = rows.map(item => new Order({orderId:item.id, userID:item.userID, orderDate:item.orderDate, total:item.total, appliedDiscount:item.appliedDiscount}));
                 console.log("result: ", result);
                 resolve(result);
             }
@@ -282,5 +298,20 @@ export function getBowlsByUser(db, field, value, password) {
           resolve(null);  // No user found, resolve with null
         }
       });*/
+    });
+}
+    
+export function delOrder(db, id) {
+    return new Promise((resolve, reject) => {
+        const sql = `DELETE FROM orders WHERE id = ?`;
+        db.run(sql, [id], function(err) {
+            if (err) {
+                reject(err);
+            } else if (this.changes === 0) {
+                reject(new Error('Order not found'));
+            } else {
+                resolve();
+            }
+        });
     });
 }

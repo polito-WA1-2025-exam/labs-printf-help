@@ -12,12 +12,12 @@ export class Order {
     appliedDiscount BOOL NOT NULL DEFAULT FALSE,
     FOREIGN KEY (userId) REFERENCES users(id) ON DELETE SET NULL
 )*/
-    constructor(orderId, userID, orderDate, totalAmount, appliedDiscount) {
+    constructor({orderId = null, userID, orderDate, total, appliedDiscount = "FALSE"}) {
         this.orderId = orderId;
         this.userID = userID; 
         this.orderDate = orderDate? orderDate : dayjs().format('YYYY-MM-DD');
-        this.totalAmount = totalAmount;
-        this.appliedDiscount = appliedDiscount? appliedDiscount : false;
+        this.total = total;
+        this.appliedDiscount = appliedDiscount;
     }
     // Getters
     getOrderId() {
@@ -32,8 +32,8 @@ export class Order {
         return this.orderDate;
     }
 
-    getTotalAmount() {
-        return this.totalAmount;
+    getTotal() {
+        return this.total;
     }
 
     getAppliedDiscount() {
@@ -53,8 +53,8 @@ export class Order {
         this.orderDate = orderDate;
     }
 
-    setTotalAmount(totalAmount) {
-        this.totalAmount = totalAmount;
+    setTotal(total) {
+        this.total = total;
     }
 
     setAppliedDiscount(appliedDiscount) {
@@ -67,7 +67,7 @@ export class Order {
             orderId: this.orderId,
             userID: this.userID,
             orderDate: this.orderDate,
-            totalAmount: this.totalAmount,
+            total: this.total,
             appliedDiscount: this.appliedDiscount
         };
     }
@@ -78,7 +78,7 @@ export class Order {
             json.orderId,
             json.userID,
             json.orderDate,
-            json.totalAmount,
+            json.total,
             json.appliedDiscount
         );
     }

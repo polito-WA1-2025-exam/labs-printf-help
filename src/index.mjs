@@ -5,6 +5,7 @@ import sqlite from 'sqlite3'
 
 import * as query from './query.mjs';
 import { User } from './user.mjs';
+import { Order } from './order.mjs';
 
 const app = express() ;
 const port = 3000;
@@ -260,6 +261,49 @@ app.get('/orders/discounts', (req, res) => {
     .catch((err) => {
         console.error(err)
         res.status(500).end()
+    })
+});
+
+app.post('/orders', [
+    check('userID').isNumeric(),
+    check('total').isNumeric()
+    ], (req, res) => {
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+        // If there are validation errors, send a 400 Bad Request response with the errors
+        return res.status(400).json({ errors: errors.array() });
+    }
+    const order = new Order({userID:req.body.userID, total:req.body.total, appliedDiscount:req.body.appliedDiscount});
+    
+    query.addOrder(db, order)
+    .then(() => {
+        console.log('Order added successfully');
+        res.status(200).end()
+    })
+    .catch((err) => {
+        console.error(err)
+        res.status(500).end()
+    })
+});
+
+
+app.delete('/orders/:id', (req, res) => {
+    const id = req.params.id;
+
+    query.delOrder(db, id)
+    .then(() => {
+        console.log('Order deleted successfully');
+        res.status(200).end()
+    })
+    .catch((err) => {
+        console.error(err)
+        if (err.message === 'Order not found') {
+            res.status(404).send('Order not found');
+        } else {
+            res.status(500).send('Internal Server Error');
+        }
+        
     })
 });
 

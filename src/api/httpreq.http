@@ -56,7 +56,7 @@ Content-Type: application/json
 
 
 
-### DELETE
+### DELETE USER
 DELETE  http://localhost:3000/user
 Content-Type: application/json
 
@@ -103,3 +103,33 @@ GET http://localhost:3000/orders
 ### GET ALL DISCOUNTED ORDERS
 
 GET http://localhost:3000/orders/discounts
+
+# ADD ORDER 1
+
+POST http://localhost:3000/orders
+Content-Type: application/json
+
+{ "userID": 1,
+  "appliedDiscount": "FALSE",
+  "total" : 5.5}
+
+# ADD ORDER 2
+
+POST http://localhost:3000/orders
+Content-Type: application/json
+
+{ "userID": 1,
+  "appliedDiscount": "TRUE",
+  "total" : 10.5}
+
+# ADD ORDER 3
+
+POST http://localhost:3000/orders
+Content-Type: application/json
+
+{ "userID": 2,
+  "total" : 10.5}
+
+# DELETE ORDER BY ID
+
+DELETE http://localhost:3000/orders/1

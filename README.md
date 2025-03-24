@@ -157,6 +157,59 @@ GET http://localhost:3000/orders
 GET http://localhost:3000/orders/discounts
 ```
 
++ **add an order:**
+_remember that an order object is created by passing an object/dict {name:asd, thing:asd}, this is done in case no ID is known to the frontend but just added at insertion_
+```http
+POST http://localhost:3000/orders
+Content-Type: application/json
+
+{ "userID": userID,
+  "appliedDiscount": optional it defaults to "FALSE" case sensitive and text,
+  "total" : 10.5,
+  "orderDate": optional, defaults to dayjs today,
+  "orderID":optional and only used in extraction usually defaults to null}
+```
+>raises issues if userID or total are not correct
+
+//TODO possibly add a check on whter the user exists before
+
++ **Delete an order:**
+deletion of an order given its id
+
+```htpp 
+DELETE http://localhost:3000/orders/orderID
+```
+>if the order ID is not present returns error message
+
+# TODO:
+b ) add:
+- get by specific characteristics
+
+c ) add:
+ - get user by ID
+ - get order by ID
+ - get bowl by ID
+ - get by date? 
+ - get bowls by size
+ ...?
+
+d) add:
+- create new user (DONE but could also do directly in the http link ?)
+- create new bowl
+- create new order (DONE but same)
+
+e - f) add:
+didn't quite catch what it meant anyway:
+- update user changing email/password/username ?
+- bowl ? 
+
+g) add:
+- delete user (DONE)
+- delete bowl
+- delete order (DONE)
+
+
+
 
 ----
 (you mayupdate this file to keep track of the progress of your group work, throughout the weeks)
