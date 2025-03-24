@@ -228,7 +228,7 @@ c ) add:
 
 d) add:
 - create new user (DONE but could also do directly in the http link ?)
-- create new bowl
+- create new bowl (DONE could it be the same?)
 - create new order (DONE but same)
 
 e - f) add:
@@ -238,7 +238,7 @@ didn't quite catch what it meant anyway:
 
 g) add:
 - delete user (DONE)
-- delete bowl
+- delete bowl (DONE)
 - delete order (DONE)
 
 
