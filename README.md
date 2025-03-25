@@ -12,6 +12,11 @@ run `npm install` or `npm.cmd install` to check if you have all the necessary mo
 # Exercise "Poke"
 
 # Lab Journal
+
+## Directory Tree
+
+_TODO_
+
 ## Lab1:
 - added basic functions, getters and setters
 - chose the topic: Poke
@@ -77,48 +82,61 @@ You can send the http request straight from the md file as a test.
 
  **list of APIs:**
 * **Add User:**
-Add a new user in the database if it doesn't exist or the email is not in use.
+> [!NOTE]
+>Add a new user in the database if it doesn't exist or the email is not in use.
 
 ```http
 POST http://localhost:3000/user
 Content-Type: application/json
 
 {
-"username": "admin",
-"email": "admin@gmail.com",
-"password": "admin123"
+  "username": "admin",
+  "email": "admin@gmail.com",
+  "password": "admin123"
 }
 ```
-> might raise errors if: password is shorter than 8, username or email already used.
+
+> [!WARNING]
+> Might raise errors if: 
+> + Password is shorter than 8 characters.
+> + Username or email already present in the database.
+
 + **Delete User:**
-Delete a user from the database ONLY if all the parameters are correct (user, email and password):
+> [!NOTE]
+>Delete a user from the database.
 ```http
 DELETE  http://localhost:3000/user
 Content-Type: application/json
 
 {
-"username": "admin",
-"email": "admin@gmail.com",
-"password": "admin123"
+  "username": "admin",
+  "email": "admin@gmail.com",
+  "password": "admin123"
 }
 ```
+> [!WARNING]
+> Might raise errors if the user identifier is not found.
+>> [!NOTE]
+>> This error should only rise during testing, because a deletion of the user should only be possible after the user log in and after he specifically decide to remove his account.
 
->might raise errors if the user is not found or it has incorrect parameters; this relete to test only because normally the deletion of a specific user is done by that user which already logged in his account.
-
-+ **Get all users:**
-Retrieve the list of all user present in the database
-> [!CAUTION]  
-> This query should only be done for testing purpose
++ **Retrieve all users:**
+> [!NOTE]
+>Retrieve the list of all user present in the database.
 ```http
 GET http://localhost:3000/user
+
+> [!CAUTION]  
+> This query should only be done for testing purpose and not be implemented in the final project.
 ```
-+ **Get a specific user:**  
-  Given a username or email and password, return the user object.   
++ **Retrieve a specific user:**  
+> [!NOTE]
+>  Given a email/username and password, return the user object.   
 
 ```http
 GET http://localhost:3000/user/authenticate?identifier=admin@gmail.com&password=admin123
 ```
->returns error if the email/user don't exist or wrong password
+> [!WARNING]
+> Returns an error if the email/username doesn't exist or the password inserted was wrong.
 + **get all bowls:**
 //TODO implement password check ?
 ```http

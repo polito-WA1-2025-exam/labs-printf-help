@@ -1,5 +1,5 @@
 import {Bowl} from "./bowl.mjs";
-import * as query from './query.mjs';
+import * as query from './api/controllers/query.mjs';
 import sqlite from 'sqlite3';
 import dayjs from 'dayjs';
 

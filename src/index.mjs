@@ -3,10 +3,11 @@ import { validationResult, check } from 'express-validator';
 import morgan from 'morgan';
 import sqlite from 'sqlite3'
 
-import * as query from './query.mjs';
-import { User } from './user.mjs';
-import { Order } from './order.mjs';
-import { Bowl } from './bowl.mjs';
+import * as query from './api/controllers/query.mjs';
+import * as userController from './api/controllers/userController.mjs';
+import { User } from './type/user.mjs';
+import { Order } from './type/order.mjs';
+import { Bowl } from './type/bowl.mjs';
 
 const app = express() ;
 const port = 3000;
@@ -30,7 +31,7 @@ app.use(morgan('dev'))
 // User list retrieval
 
 app.get('/user', (req, res) => {
-    query.listUsers(db)
+    userController.listUsers(db)
     .then((result) => {
         res.json(result)
         res.status(200).end()
@@ -68,7 +69,7 @@ app.get('/user/authenticate', [
     // Select the search field based on the input
     const searchField = identifier.includes('@') ? 'email' : 'username';
 
-    query.authenticateUser(db, searchField, identifier, password)
+    userController.authenticateUser(db, searchField, identifier, password)
     .then((user) => {
         if (user) {
             res.status(200).json(user);  // Successfully authenticated
@@ -101,7 +102,7 @@ app.post('/user', [
     const user = new User(req.body.username, req.body.email, req.body.password);
 
     // Add the user to the database
-    query.addUser(db, user)
+    userController.addUser(db, user)
     .then(() => {
         console.log('User added successfully');
         res.status(201).send('User created');
@@ -122,7 +123,7 @@ app.post('/user', [
 app.delete('/user', (req, res) => {
     const user = new User(req.body.username, req.body.email, req.body.password);
 
-    query.delUser(db, user)
+    userController.delUser(db, user)
     .then(() => {
         console.log('User deleted successfully');
         res.status(200).end()

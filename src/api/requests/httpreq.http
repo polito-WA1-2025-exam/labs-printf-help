@@ -1,32 +1,6 @@
 GET http://localhost:3000/
 
 ##############################################
-#                  USER API                  #
-##############################################
-
-### Retrieve the list of all users
-GET http://localhost:3000/user
-
-### Retrive a user by email or username and password
-GET http://localhost:3000/user/authenticate?identifier=Andrea&password=346317
-
-### Create a new user
-POST http://localhost:3000/user
-Content-Type: application/json
-
-{ "username": "Test",
-  "email" : "test@gmail.com",
-  "password" : "testosterone"}
-
-### Delete a user (Supposed to be done only if you're already logged in)
-DELETE  http://localhost:3000/user
-Content-Type: application/json
-
-{ "username": "Test",
-  "email" : "test@gmail.com",
-  "password" : "testosterone"}
-
-##############################################
 #                  ORDER API                 #
 ##############################################
 
