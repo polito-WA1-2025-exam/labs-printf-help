@@ -80,14 +80,12 @@ export class Bowl {
         console.log('Ingredients: ' + this.getIngredients());
     }
 
-    // toJSON() {
-    //     return {
-    //         size: this.size ? this.size.getSize() : null,
-    //         base: this.base ? this.base.getBase() : null,
-    //         proteins: this.proteins.map(p => p.getProtein()),
-    //         ingredients: this.ingredients.map(i => i.getIngredient())
-    //     };
-    //}
+    fromJSON(json) {
+        this.size = json.size;
+        this.base = json.base;
+        this.proteins = json.proteins;
+        this.ingredients = json.ingredients;
+    }
     toJSON() {
         return {
             size: this.size,

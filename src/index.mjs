@@ -3,8 +3,9 @@ import { validationResult, check } from 'express-validator';
 import morgan from 'morgan';
 import sqlite from 'sqlite3'
 
-import * as query from './api/controllers/query.mjs';
-import * as userController from './api/controllers/userController.mjs';
+import * as query from './api/query/genericQuery.mjs';
+import * as userQuery from './api/query/userQuery.mjs';
+import * as orderQuery from './api/query/orderQuery.mjs';
 import { User } from './type/user.mjs';
 import { Order } from './type/order.mjs';
 import { Bowl } from './type/bowl.mjs';
@@ -30,8 +31,8 @@ app.use(morgan('dev'))
 
 // User list retrieval
 
-app.get('/user', (req, res) => {
-    userController.listUsers(db)
+app.get('/users', (req, res) => {
+    userQuery.getUsers(db)
     .then((result) => {
         res.json(result)
         res.status(200).end()
@@ -69,7 +70,7 @@ app.get('/user/authenticate', [
     // Select the search field based on the input
     const searchField = identifier.includes('@') ? 'email' : 'username';
 
-    userController.authenticateUser(db, searchField, identifier, password)
+    userQuery.authenticateUser(db, searchField, identifier, password)
     .then((user) => {
         if (user) {
             res.status(200).json(user);  // Successfully authenticated
@@ -102,7 +103,7 @@ app.post('/user', [
     const user = new User(req.body.username, req.body.email, req.body.password);
 
     // Add the user to the database
-    userController.addUser(db, user)
+    userQuery.addUser(db, user)
     .then(() => {
         console.log('User added successfully');
         res.status(201).send('User created');
@@ -123,7 +124,7 @@ app.post('/user', [
 app.delete('/user', (req, res) => {
     const user = new User(req.body.username, req.body.email, req.body.password);
 
-    userController.delUser(db, user)
+    userQuery.delUser(db, user)
     .then(() => {
         console.log('User deleted successfully');
         res.status(200).end()
@@ -142,6 +143,60 @@ app.delete('/user', (req, res) => {
 
 /*-------------------------------------------*/
 //                ORDER ROUTES
+/*-------------------------------------------*/
+
+app.get('/orders', (req, res) => {
+    orderQuery.getOrders(db)
+    .then((result) => {
+        res.json(result)
+        res.status(200).end()
+    })
+    .catch((err) => {
+        console.error(err)
+        res.status(500).end()
+    })
+});
+
+app.get('/order', (req, res) => {
+    const  id  = req.query.userId;
+
+    console.log(id);
+    orderQuery.getOrdersByUser(db, id)
+    .then((result) => {
+        if (result) {
+            res.json(result)
+            res.status(200).end()
+        }
+        else {
+            res.status(404).send('No orders found for this user');
+        }
+    })
+    .catch((err) => {
+        console.error(err)
+        res.status(500).end()
+    })
+});
+
+app.post('/order', (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        // If there are validation errors, send a 400 Bad Request response with the errors
+        return res.status(400).json({ errors: errors.array() });
+    }
+
+    orderQuery.addOrder(db, req.body)
+    .then(() => {
+        console.log('Order added successfully');
+        res.status(200).end()
+    })
+    .catch((err) => {
+        console.error(err)
+        res.status(500).end()
+    })
+});
+
+/*-------------------------------------------*/
+/*                BOWL ROUTES                */
 /*-------------------------------------------*/
 
 app.get('/bowls', (req, res) => {
@@ -192,19 +247,6 @@ app.get('/bowls', (req, res) => {
       });
   });
 
-
-  app.get('/orders', (req, res) => {
-    query.listOrders(db)
-    .then((result) => {
-        res.json(result)
-        res.status(200).end()
-    })
-    .catch((err) => {
-        console.error(err)
-        res.status(500).end()
-    })
-});
-
 app.get('/orders/discounts', (req, res) => {
     query.listDiscountedOrders(db)
     .then((result) => {
@@ -216,30 +258,6 @@ app.get('/orders/discounts', (req, res) => {
         res.status(500).end()
     })
 });
-
-app.post('/orders', [
-    check('userID').isNumeric(),
-    check('total').isNumeric()
-    ], (req, res) => {
-    const errors = validationResult(req);
-
-    if (!errors.isEmpty()) {
-        // If there are validation errors, send a 400 Bad Request response with the errors
-        return res.status(400).json({ errors: errors.array() });
-    }
-    const order = new Order({userID:req.body.userID, total:req.body.total, appliedDiscount:req.body.appliedDiscount});
-    
-    query.addOrder(db, order)
-    .then(() => {
-        console.log('Order added successfully');
-        res.status(200).end()
-    })
-    .catch((err) => {
-        console.error(err)
-        res.status(500).end()
-    })
-});
-
 
 app.delete('/orders/:id', (req, res) => {
     const id = req.params.id;
@@ -325,31 +343,6 @@ app.delete('/bowls/orders/:userId', (req, res) => {
     })
 });
 
-
-
-
-
-
-
-
-
-app.get('/', (req, res) =>	res.send('Hello World!')) ;
-
-app.get('/user', (req, res) => {
-    let u = { name: 'Fulvio', id:123 }
-    res.json(u)
-})
-
 app.listen(port, () =>	console.log('Server	ready')) ;
-
-// TEMPLATES
-
-// app.get('/user/:id/name', (req, res) => {
-//     const id = req.params.id 
-
-//     res.json({"id": id, "name": "Tom"})
-// })
-
-// // Activate server
 
 

@@ -5,7 +5,7 @@ import {User} from "../../type/user.mjs";
 /*-------------------------------------------*/
 
 // User list retrieval
-export function listUsers (db) {
+export function getUsers (db) {
     return new Promise((resolve, reject) => {
         const sql = `SELECT * 
                     FROM users`;
@@ -15,8 +15,7 @@ export function listUsers (db) {
                 reject(err);
             }
             else {
-                const result = rows.map(item => new User(item.username, item.email, item.password, item.creationDate))
-                resolve(result);
+                resolve(rows);
             }
         });
     });

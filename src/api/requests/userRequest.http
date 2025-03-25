@@ -3,7 +3,7 @@
 ##############################################
 
 ### Retrieve the list of all users
-GET http://localhost:3000/user
+GET http://localhost:3000/users
 
 ### Retrive a user by email or username and password
 GET http://localhost:3000/user/authenticate?identifier=Andrea&password=346317

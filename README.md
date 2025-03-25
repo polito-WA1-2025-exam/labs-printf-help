@@ -14,8 +14,16 @@ run `npm install` or `npm.cmd install` to check if you have all the necessary mo
 # Lab Journal
 
 ## Directory Tree
-
-_TODO_
+```
+C:.
+├───assignments
+├───databases
+└───src
+    ├───api
+    │   ├───query
+    │   └───requests
+    └───type
+```
 
 ## Lab1:
 - added basic functions, getters and setters
@@ -80,8 +88,8 @@ VALUES (1, '[
 ## Lab 3:
 You can send the http request straight from the md file as a test.
 
- **list of APIs:**
-* **Add User:**
+### User APIs:
+#### **Add User:**
 > [!NOTE]
 >Add a new user in the database if it doesn't exist or the email is not in use.
 
@@ -101,7 +109,9 @@ Content-Type: application/json
 > + Password is shorter than 8 characters.
 > + Username or email already present in the database.
 
-+ **Delete User:**
+<br/><br/>
+
+#### **Delete User:**
 > [!NOTE]
 >Delete a user from the database.
 ```http
@@ -116,19 +126,24 @@ Content-Type: application/json
 ```
 > [!WARNING]
 > Might raise errors if the user identifier is not found.
->> [!NOTE]
->> This error should only rise during testing, because a deletion of the user should only be possible after the user log in and after he specifically decide to remove his account.
 
-+ **Retrieve all users:**
+> [!TIP]
+> This error should only rise during testing, because a deletion of the user should only be possible after the user log in and after he specifically decide to remove his account.
+
+<br/><br/>
+
+#### **Retrieve all users:**
 > [!NOTE]
 >Retrieve the list of all user present in the database.
 ```http
 GET http://localhost:3000/user
-
+```
 > [!CAUTION]  
 > This query should only be done for testing purpose and not be implemented in the final project.
-```
-+ **Retrieve a specific user:**  
+
+<br/><br/>
+
+#### **Retrieve a specific user:**  
 > [!NOTE]
 >  Given a email/username and password, return the user object.   
 
@@ -137,7 +152,11 @@ GET http://localhost:3000/user/authenticate?identifier=admin@gmail.com&password=
 ```
 > [!WARNING]
 > Returns an error if the email/username doesn't exist or the password inserted was wrong.
-+ **get all bowls:**
+
+<br/><br/>
+
+### Order APIs:
+#### **get all bowls:**
 //TODO implement password check ?
 ```http
 GET http://localhost:3000/bowls
@@ -164,6 +183,10 @@ GET http://localhost:3000/bowls/auth/user?username=admin&password=admin123
 GET http://localhost:3000/orders
 ```
 + **get all discounted orders:**
+```http
+GET http://localhost:3000/orders/discounts
+```
+
 + **get all bowls:**
 //TODO implement password check ?
 ```http
@@ -178,7 +201,7 @@ Content-Type: application/json
 
 { "userID": userID,
   "appliedDiscount": optional it defaults to "FALSE" case sensitive and text,
-  "total" : 10.5,
+  "total" : number two decimals,
   "orderDate": optional, defaults to dayjs today,
   "orderID":optional and only used in extraction usually defaults to null}
 ```
@@ -229,7 +252,7 @@ DELETE http://localhost:3000/bowls/orders/:orderId
 
 # TODO:
 b ) add:
-- get by specific characteristics
+- [ ] get by specific characteristics
 
 c ) add:
  - get user by ID
@@ -240,9 +263,9 @@ c ) add:
  ...?
 
 d) add:
-- create new user (DONE but could also do directly in the http link ?)
-- create new bowl (DONE could it be the same?)
-- create new order (DONE but same)
+- [x] create new user (DONE but could also do directly in the http link ?)
+- [x] create new bowl (DONE could it be the same?)
+- [x] create new order (DONE but same)
 
 e - f) add:
 didn't quite catch what it meant anyway:
@@ -250,12 +273,14 @@ didn't quite catch what it meant anyway:
 - bowl ? 
 
 g) add:
-- delete user (DONE)
-- delete bowl (DONE)
-- delete order (DONE)
+- [x] delete user (DONE)
+- [x] delete bowl (DONE)
+- [x] delete order (DONE)
 
 
 
 
 ----
 (you mayupdate this file to keep track of the progress of your group work, throughout the weeks)
+
+

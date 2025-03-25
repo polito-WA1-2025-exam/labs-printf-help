@@ -1,0 +1,17 @@
+##############################################
+#                  ORDER API                 #
+##############################################
+
+### Retrieve the list of all orders
+GET http://localhost:3000/orders
+
+### Retrieve the list of all orders for a specific user
+GET http://localhost:3000/order?userId=1
+
+###
+POST http://localhost:3000/order
+Content-Type: application/json
+
+{ "userID": 1,
+  "appliedDiscount": "FALSE",
+  "total" : 5.5}

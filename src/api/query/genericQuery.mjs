@@ -1,5 +1,4 @@
 import {Bowl} from "../../type/bowl.mjs";
-import {User} from "../../type/user.mjs";
 import { Order } from "../../type/order.mjs";
 
 export function displayOrders(db) {
@@ -29,22 +28,6 @@ export function displayOrders(db) {
 /*-------------------------------------------*/
 //               ORDERS QUERIES
 /*-------------------------------------------*/
-
-export function addOrder (db, order) {
-    return new Promise((resolve, reject) => {
-        const sql = `INSERT INTO orders (userID, total, appliedDiscount) 
-                    VALUES (?, ?, ?)`;
-        console.log("order: ", order.getAppliedDiscount());
-        db.run(sql, [order.getUserID(), order.getTotal(), order.getAppliedDiscount()], function(err) {
-            if (err) {
-                reject(err);
-            }
-            else {
-                resolve();
-            }
-        });
-    });
-}
 
 export function listBowls (db) {
     return new Promise((resolve, reject) => {
