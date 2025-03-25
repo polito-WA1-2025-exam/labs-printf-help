@@ -30,8 +30,7 @@ export function displayOrders(db) {
 //               USER QUERIES
 /*-------------------------------------------*/
 
-// user list retrieval
-
+// User list retrieval
 export function listUsers (db) {
     return new Promise((resolve, reject) => {
         const sql = `SELECT * 
@@ -49,31 +48,7 @@ export function listUsers (db) {
     });
 }
 
-// user retrieval by email and password
-
-export function findUserByEmailAndPassword (db, email, password) {
-    return new Promise((resolve, reject) => {
-        const sql = `SELECT *
-                    FROM users
-                    WHERE email = ? AND password = ?`;
-
-        db.get(sql, [email, password], (err, row) => {
-            if (err) {
-                reject(err);
-            }
-            else {
-                if (row) {
-                    const user = new User(row.username, row.email, row.password, row.creationDate);
-                    resolve(user);
-                }
-                else {
-                    resolve(null);
-                }
-            }
-        })
-    })
-}
-
+// Authenticate user by email or username and password
 export function authenticateUser(db, field, value, password) {
     return new Promise((resolve, reject) => {
       const sql = `SELECT * FROM users WHERE ${field} = ? AND password = ?`;
@@ -90,31 +65,24 @@ export function authenticateUser(db, field, value, password) {
     });
 }
 
-// creation of a new user
-
-export function addUserWithCheck(db, user) {
+// Creation of a new user
+export function addUser(db, user) {
     return new Promise((resolve, reject) => {
         // Check if the username already exists
-        const checkUsernameSql = `SELECT 1 FROM users WHERE username = ? LIMIT 1`;
-        db.get(checkUsernameSql, [user.getUsername()], (err, row) => {
-            if (err) {
-                reject(err);
-            } else if (row) {
-                // If a row is returned, the username already exists
+        usernameCheck(db, user.getUsername())
+        .then((exist) => {
+            if (exist) {
                 reject(new Error('Username already taken'));
             } else {
-                // If the username is available, check if the email already exists
-                const checkEmailSql = `SELECT 1 FROM users WHERE email = ? LIMIT 1`;
-                db.get(checkEmailSql, [user.getEmail()], (err, row) => {
-                    if (err) {
-                        reject(err);
-                    } else if (row) {
-                        // If a row is returned, the email already exists
+                // Check if the email already exists
+                emailCheck(db, user.getEmail())
+                .then((exist) => {
+                    if (exist) {
                         reject(new Error('Email already in use'));
                     } else {
                         // Insert the new user if both username and email are available
-                        const insertSql = `INSERT INTO users (username, email, password) VALUES (?, ?, ?)`;
-                        db.run(insertSql, [user.getUsername(), user.getEmail(), user.getPassword()], function(err) {
+                        const sql = `INSERT INTO users (username, email, password) VALUES (?, ?, ?)`;
+                        db.run(sql, [user.getUsername(), user.getEmail(), user.getPassword()], function(err) {
                             if (err) {
                                 reject(err);
                             } else {
@@ -122,44 +90,57 @@ export function addUserWithCheck(db, user) {
                             }
                         });
                     }
+                })
+                .catch((err) => {
+                    reject(err);
                 });
             }
+        })
+        .catch((err) => {
+            reject(err);
         });
     });
 }
 
-export function addUser (db, user) {
+function usernameCheck (db, username) {
     return new Promise((resolve, reject) => {
-        const sql = `INSERT INTO users (username, email, password) 
-                    VALUES (?, ?, ?)`;
-
-        db.run(sql, [user.getUsername(), user.getEmail(), user.getPassword()], function(err) {
+        const sql = `SELECT 1 
+                    FROM users 
+                    WHERE username = ? 
+                    LIMIT 1`
+        
+        db.get(sql, [username], (err, row) => {
             if (err) {
                 reject(err);
-            }
-            else {
-                resolve();
+            } else if (row) {
+                resolve(true);
+            } else {
+                resolve(false);
             }
         });
-    });
+    })
 }
 
-export function addOrder (db, order) {
+function emailCheck (db, email) {
     return new Promise((resolve, reject) => {
-        const sql = `INSERT INTO orders (userID, total, appliedDiscount) 
-                    VALUES (?, ?, ?)`;
-        console.log("order: ", order.getAppliedDiscount());
-        db.run(sql, [order.getUserID(), order.getTotal(), order.getAppliedDiscount()], function(err) {
+        const sql = `SELECT 1 
+                    FROM users 
+                    WHERE email = ? 
+                    LIMIT 1`
+        
+        db.get(sql, [email], (err, row) => {
             if (err) {
                 reject(err);
-            }
-            else {
-                resolve();
+            } else if (row) {
+                resolve(true);
+            } else {
+                resolve(false);
             }
         });
-    });
+    })
 }
 
+// Deletion of a user
 export function delUser (db, user) {
     return new Promise((resolve, reject) => {
         const sql = `DELETE FROM users
@@ -172,6 +153,26 @@ export function delUser (db, user) {
                 // If no rows were deleted, that means the user does not exist
                 reject(new Error('User not found or parameters are incorrect'));
             }else {
+                resolve();
+            }
+        });
+    });
+}
+
+/*-------------------------------------------*/
+//               ORDERS QUERIES
+/*-------------------------------------------*/
+
+export function addOrder (db, order) {
+    return new Promise((resolve, reject) => {
+        const sql = `INSERT INTO orders (userID, total, appliedDiscount) 
+                    VALUES (?, ?, ?)`;
+        console.log("order: ", order.getAppliedDiscount());
+        db.run(sql, [order.getUserID(), order.getTotal(), order.getAppliedDiscount()], function(err) {
+            if (err) {
+                reject(err);
+            }
+            else {
                 resolve();
             }
         });

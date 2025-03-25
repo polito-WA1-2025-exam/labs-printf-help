@@ -27,7 +27,7 @@ app.use(morgan('dev'))
 //                USER ROUTES
 /*-------------------------------------------*/
 
-// user list retrieval
+// User list retrieval
 
 app.get('/user', (req, res) => {
     query.listUsers(db)
@@ -41,135 +41,86 @@ app.get('/user', (req, res) => {
     })
 });
 
-// user retrieval by email and password
+// User retrieval by email or username and password
 
-app.get('/user/email/:email/password/:password', [
-        check('email').isEmail()
-    ], (req, res) => {
-    const email = req.params.email
-    const password = req.params.password
-
-    query.findUserByEmailAndPassword(db, email, password)
-    .then((result) => {
-        if (result) {
-            res.json(result)
-            res.status(200).end()
-        }
-        else {
-            res.status(404).end()
-        }
-    })
-    .catch((err) => {
-        console.error(err)
-        res.status(500).end()
-    })
-});
-
-app.get('/user/authenticate', [
-    check('email').optional().isEmail().withMessage('Invalid email format'),
-    check('username').optional().isString().withMessage('Invalid username'),
-    check('password').isLength({ min: 8 }).withMessage('Password must be at least 8 characters')
-  ], (req, res) => {
-    const { email, username, password } = req.query;
-  
+app.get('/user/emailOrUsername/:emailOrUsername/password/:password', [
+        check('emailOrUsername').isString().withMessage('Invalid email or username'),
+        check('password').isString().withMessage('Invalid password')
+], (req, res) => {
+    const { emailOrUsername, password } = req.params;
+    
     // Check validation errors
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
-    }
-  
-    // Check if email or username is provided
-    if (!email && !username) {
-      return res.status(400).send('Email or username is required');
-    }
-  
-    const searchField = email ? 'email' : 'username';
-    const searchValue = email || username;
-  
-    query.authenticateUser(db, searchField, searchValue, password)
-      .then((user) => {
-        if (user) {
-          res.status(200).json(user);  // Successfully authenticated
-        } else {
-          res.status(401).send('Invalid credentials');  // Authentication failed
-        }
-      })
-      .catch((err) => {
-        console.error(err);
-        res.status(500).send('Internal Server Error');
-      });
-  });
-
-// creation of a new user
-
-app.post('/user', [
-        check('username').isString(),
-        check('email').isEmail(),
-        check('password').isLength({min: 8}).withMessage('Password must be at least 8 characters long')
-    ], (req, res) => {
-    const errors = validationResult(req);
-
-    if (!errors.isEmpty()) {
-        // If there are validation errors, send a 400 Bad Request response with the errors
         return res.status(400).json({ errors: errors.array() });
     }
-    const user = new User(req.body.username, req.body.email, req.body.password);
     
-    query.addUser(db, user)
-    .then(() => {
-        console.log('User added successfully');
-        res.status(200).end()
+    // Check if email or username is provided
+    if (!emailOrUsername) {
+        return res.status(400).send('Email or username is required to login');
+    }
+
+    // Check if password is provided
+    if (!password) {
+        return res.status(400).send('Password is required to login');
+    }
+    
+    // Select the search field based on the input
+    const searchField = emailOrUsername.includes('@') ? 'email' : 'username';
+    const searchValue = emailOrUsername;
+
+    query.authenticateUser(db, searchField, searchValue, password)
+    .then((user) => {
+        if (user) {
+            res.status(200).json(user);  // Successfully authenticated
+        } else {
+            res.status(404).send('Invalid credentials');  // Authentication failed
+        }
     })
     .catch((err) => {
-        console.error(err)
-        res.status(500).end()
-    })
+        console.error(err);
+        res.status(500).send('Internal Server Error');
+    });
 });
 
-app.post('/user/check', [
-    check('username').isString(),
-    check('email').isEmail(),
+// Creation of a new user
+
+app.post('/user', [
+    check('username').isString().withMessage('Invalid username'),
+    check('email').isEmail().withMessage('Invalid email'),
     check('password').isLength({ min: 8 }).withMessage('Password must be at least 8 characters long')
+                    .isString().withMessage('Invalid password').withMessage('Password must contain at least 1 uppercase, 1 lowercase, 1 number and 1 special character')
 ], (req, res) => {
     const errors = validationResult(req);
 
+    // Check validation errors
     if (!errors.isEmpty()) {
-        // If there are validation errors, send a 400 Bad Request response with the errors
         return res.status(400).json({ errors: errors.array() });
     }
 
+    // Create a new user object
     const user = new User(req.body.username, req.body.email, req.body.password);
 
-    query.addUserWithCheck(db, user)
+    // Add the user to the database
+    query.addUser(db, user)
     .then(() => {
         console.log('User added successfully');
         res.status(201).send('User created');
     })
-    .catch((err) => {
+    .catch((err) => {  
         console.error(err);
-        
+
         // Check for specific error messages and return appropriate response
-        if (err.message === 'Username already taken') {
-            res.status(409).send('Username already taken');
-        } else if (err.message === 'Email already in use') {
-            res.status(409).send('Email already in use');
+        if (err.message === 'Username already taken' || err.message === 'Email already in use') {
+            res.status(409).send(err.message);
         } else {
             res.status(500).send('Internal Server Error');
         }
     });
 });
 
-
-
-
-
-
-
-app.delete('/user', [
-    check('username').isString(),
-    check('email').isEmail(),
-    check('password').isLength({min: 8})
-    ], (req, res) => {
+// Deletion of a user
+app.delete('/user', (req, res) => {
     const user = new User(req.body.username, req.body.email, req.body.password);
 
     query.delUser(db, user)
