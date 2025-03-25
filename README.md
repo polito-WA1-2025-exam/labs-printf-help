@@ -73,14 +73,14 @@ VALUES (1, '[
 ]', ); '''
 ---
 ## Lab 3:
-you can send the http request straight from the md file as a test.
+You can send the http request straight from the md file as a test.
 
  **list of APIs:**
-* **add User:**
-add a new user in the database if it doesn't exist or the email is not in use.
+* **Add User:**
+Add a new user in the database if it doesn't exist or the email is not in use.
 
 ```http
-POST http://localhost:3000/user/check
+POST http://localhost:3000/user
 Content-Type: application/json
 
 {
@@ -89,9 +89,9 @@ Content-Type: application/json
 "password": "admin123"
 }
 ```
-> might raise errors if: password is shorter than 8, username or email already used. (the email and user check is only availlable at **/user/check**).
-+ **delete User:**
-delete a user from the database ONLY if all the parameters are correct (user, email and password):
+> might raise errors if: password is shorter than 8, username or email already used.
++ **Delete User:**
+Delete a user from the database ONLY if all the parameters are correct (user, email and password):
 ```http
 DELETE  http://localhost:3000/user
 Content-Type: application/json
@@ -103,25 +103,20 @@ Content-Type: application/json
 }
 ```
 
->might raise errors if the user is not found or it has incorrect parameters.
+>might raise errors if the user is not found or it has incorrect parameters; this relete to test only because normally the deletion of a specific user is done by that user which already logged in his account.
 
-+ **get all users:**
-//TODO implement password check ?
++ **Get all users:**
+Retrieve the list of all user present in the database
+> [!CAUTION]  
+> This query should only be done for testing purpose
 ```http
 GET http://localhost:3000/user
 ```
 + **Get a specific user:**  
-  _TODO: Given a username or email + password, return the user object._  
-
-  - **To get a user with a known email and password:**  
+  Given a username or email and password, return the user object.   
 
 ```http
-GET http://localhost:3000/user/authenticate?email=test@mail.com&password=password123
-```  
-
-  - **To get a user with a known username and password:**  
-```http
-GET http://localhost:3000/user/authenticate?username=Sam&password=password123
+GET http://localhost:3000/user/authenticate?identifier=admin@gmail.com&password=admin123
 ```
 >returns error if the email/user don't exist or wrong password
 + **get all bowls:**
