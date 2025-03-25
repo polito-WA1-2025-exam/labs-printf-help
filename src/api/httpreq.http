@@ -8,7 +8,7 @@ GET http://localhost:3000/
 GET http://localhost:3000/user
 
 ### Retrive a user by email or username and password
-GET http://localhost:3000/user/emailOrUsername/s346317@studenti.polito.it/password/346317
+GET http://localhost:3000/user/authenticate?identifier=Andrea&password=346317
 
 ### Create a new user
 POST http://localhost:3000/user

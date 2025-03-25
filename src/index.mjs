@@ -43,11 +43,11 @@ app.get('/user', (req, res) => {
 
 // User retrieval by email or username and password
 
-app.get('/user/emailOrUsername/:emailOrUsername/password/:password', [
-        check('emailOrUsername').isString().withMessage('Invalid email or username'),
+app.get('/user/authenticate', [
+        check('identifier').isString().withMessage('Invalid email or username'),
         check('password').isString().withMessage('Invalid password')
 ], (req, res) => {
-    const { emailOrUsername, password } = req.params;
+    const { identifier, password } = req.query;
     
     // Check validation errors
     const errors = validationResult(req);
@@ -56,7 +56,7 @@ app.get('/user/emailOrUsername/:emailOrUsername/password/:password', [
     }
     
     // Check if email or username is provided
-    if (!emailOrUsername) {
+    if (!identifier) {
         return res.status(400).send('Email or username is required to login');
     }
 
@@ -66,10 +66,9 @@ app.get('/user/emailOrUsername/:emailOrUsername/password/:password', [
     }
     
     // Select the search field based on the input
-    const searchField = emailOrUsername.includes('@') ? 'email' : 'username';
-    const searchValue = emailOrUsername;
+    const searchField = identifier.includes('@') ? 'email' : 'username';
 
-    query.authenticateUser(db, searchField, searchValue, password)
+    query.authenticateUser(db, searchField, identifier, password)
     .then((user) => {
         if (user) {
             res.status(200).json(user);  // Successfully authenticated
