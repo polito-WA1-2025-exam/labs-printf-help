@@ -4,6 +4,9 @@ import morgan from 'morgan';
 import * as userRoutes from './api/routes/userRoutes.mjs';
 import * as orderRoutes from './api/routes/orderRoutes.mjs';
 
+import { Order } from './type/order.mjs'
+import { Bowl } from './type/bowl.mjs'
+
 const app = express() ;
 const port = 3000;
 
@@ -11,6 +14,15 @@ app.use(express.json())
 app.use(morgan('dev'))
 app.use('/user', userRoutes.router)
 app.use('/order', orderRoutes.router)
+
+const order = new Order({userID: 1});
+const bowl1 = new Bowl({size: 'S', base: 'White rice', proteins: ['Chicken'], ingredients: ['Lettuce', 'Tomato'], price: 10});
+const bowl2 = new Bowl({size: 'M', base: 'Black rice', proteins: ['Salmon', 'Shrimp'], ingredients: ['Mango', 'Avocado', 'Mais'], price: 12});
+
+order.addBowl(bowl1);
+order.addBowl(bowl2);
+
+console.log(order.toJSON());
 
 /*-------------------------------------------*/
 //                ORDER ROUTES

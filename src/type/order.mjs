@@ -1,7 +1,7 @@
 import dayjs from "dayjs";
 
 export class Order {
-    constructor({orderId = null, userID, orderDate, total, appliedDiscount = "FALSE"}) {
+    constructor({orderId = null, userID, orderDate, total = 0, appliedDiscount = "FALSE"}) {
         this.orderId = orderId;
         this.userID = userID; 
         this.orderDate = orderDate? orderDate : dayjs().format('YYYY-MM-DD');
@@ -64,6 +64,7 @@ export class Order {
             orderId: this.orderId,
             userID: this.userID,
             orderDate: this.orderDate,
+            bowls: this.bowls.map(bowl => bowl.toJSON()),
             total: this.total,
             appliedDiscount: this.appliedDiscount
         };

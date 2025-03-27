@@ -1,16 +1,16 @@
 // BOWL CLASS
 export class Bowl {
     constructor(size, base, proteins, ingredients, price) {
-        this.size = size; // Size of the bowl
-        this.base = base; // Base of the bowl
+        this.size = new Size(size); // Size of the bowl
+        this.base = new Base (base); // Base of the bowl
         // Handle both string and array inputs for proteins
         this.proteins = typeof proteins === 'string' 
-        ? proteins.split(",") 
-        : proteins; 
+        ? proteins.split(",")
+        : proteins;
 
         // Handle both string and array inputs for ingredients
         this.ingredients = typeof ingredients === 'string' 
-        ? ingredients.split(",") 
+        ? ingredients.split(",")
         : ingredients;
         this.price = price;
     }
@@ -85,15 +85,19 @@ export class Bowl {
         this.base = json.base;
         this.proteins = json.proteins;
         this.ingredients = json.ingredients;
+        this.price = json.price;
     }
+
     toJSON() {
         return {
-            size: this.size,
-            base: this.base,
+            size: this.size.getSize(),
+            base: this.base.getBase(),
             proteins: this.proteins,
-            ingredients: this.ingredients
+            ingredients: this.ingredients,
+            price: this.price
         };
     }
+
     toString(choice) {
         if (choice === "proteins") {
             return this.proteins.join(",");
