@@ -32,6 +32,22 @@ export function getUser(db, field, value, password) {
     });
 }
 
+export function getUserBy(db, field, value) {
+    return new Promise((resolve, reject) => {
+      const sql = `SELECT * FROM users WHERE ${field} = ?`;
+  
+      db.get(sql, [value], (err, row) => {
+        if (err) {
+          reject(err);  // If there's an error with the query, reject the promise
+        } else if (row) {
+          resolve(row);  // User found, resolve the promise with the user data
+        } else {
+          resolve(null);  // No user found, resolve with null
+        }
+      });
+    });
+}
+
 // Creation of a new user
 export function addUser(db, user) {
     return new Promise((resolve, reject) => {

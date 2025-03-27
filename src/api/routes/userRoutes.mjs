@@ -20,3 +20,5 @@ router.post('/register', [
 ], userController.postUser)
 
 router.delete('/delete', userController.deleteUser)
+
+router.get('/:id', userController.getUserById);

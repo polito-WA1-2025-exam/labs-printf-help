@@ -21,6 +21,30 @@ export function getUsers (req, res) {
     });
 }
 
+export function getUserById(req, res) {
+    const db = genericQueries.connectDB();
+    const { id } = req.params;
+
+    console.log("id in controller: " + id);
+
+    // Using the getUserBy query by passing 'id' as field
+    userQueries.getUserBy(db, 'id', id)
+    .then((user) => {
+        if (user) {
+            res.status(200).json(user);
+        } else {
+            res.status(404).send('User not found');
+        }
+    })
+    .catch((err) => {
+        console.error(err);
+        res.status(500).send('Internal Server Error');
+    })
+    .finally(() => {
+        genericQueries.closeDB(db);
+    });
+}
+
 export function authenticateUser (req, res) {
     const { identifier, password } = req.query;
         const db = genericQueries.connectDB();
