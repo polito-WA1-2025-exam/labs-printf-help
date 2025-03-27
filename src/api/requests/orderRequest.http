@@ -3,10 +3,10 @@
 ##############################################
 
 ### Retrieve the list of all orders
-GET http://localhost:3000/orders
+GET http://localhost:3000/order/list
 
 ### Retrieve the list of all orders for a specific user
-GET http://localhost:3000/order?userId=1
+GET http://localhost:3000/order/user?userId=2
 
 ###
 POST http://localhost:3000/order

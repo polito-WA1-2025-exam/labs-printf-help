@@ -1,23 +1,13 @@
-// order.mjs
-
 import dayjs from "dayjs";
 
-// Example: A class to represent an Order
 export class Order {
-    /*CREATE TABLE orders (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    userID INTEGER NOT NULL,
-    orderDate DATETIME DEFAULT CURRENT_TIMESTAMP,
-    total DECIMAL(10,2) NOT NULL,
-    appliedDiscount BOOL NOT NULL DEFAULT FALSE,
-    FOREIGN KEY (userId) REFERENCES users(id) ON DELETE SET NULL
-)*/
     constructor({orderId = null, userID, orderDate, total, appliedDiscount = "FALSE"}) {
         this.orderId = orderId;
         this.userID = userID; 
         this.orderDate = orderDate? orderDate : dayjs().format('YYYY-MM-DD');
         this.total = total;
         this.appliedDiscount = appliedDiscount;
+        this.bowls = [];
     }
     // Getters
     getOrderId() {
@@ -39,6 +29,9 @@ export class Order {
     getAppliedDiscount() {
         return this.appliedDiscount;
     }
+    getBowls() {
+        return this.bowls;
+    }
 
     // Setters
     setOrderId(orderId) {
@@ -59,6 +52,10 @@ export class Order {
 
     setAppliedDiscount(appliedDiscount) {
         this.appliedDiscount = appliedDiscount;
+    }
+
+    addBowl (bowl) {
+        this.bowls.push(bowl);
     }
 
     // Convert to JSON

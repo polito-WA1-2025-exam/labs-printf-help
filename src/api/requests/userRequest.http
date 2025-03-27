@@ -3,13 +3,13 @@
 ##############################################
 
 ### Retrieve the list of all users
-GET http://localhost:3000/users
+GET http://localhost:3000/user/list
 
 ### Retrive a user by email or username and password
 GET http://localhost:3000/user/authenticate?identifier=Andrea&password=346317
 
 ### Create a new user
-POST http://localhost:3000/user
+POST http://localhost:3000/user/register
 Content-Type: application/json
 
 { "username": "Test",
@@ -17,7 +17,7 @@ Content-Type: application/json
   "password" : "testosterone"}
 
 ### Delete a user (Supposed to be done only if you're already logged in)
-DELETE  http://localhost:3000/user
+DELETE  http://localhost:3000/user/delete
 Content-Type: application/json
 
 { "username": "Test",

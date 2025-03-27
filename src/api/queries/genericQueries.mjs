@@ -1,5 +1,29 @@
+import sqlite from 'sqlite3'
+
 import {Bowl} from "../../type/bowl.mjs";
 import { Order } from "../../type/order.mjs";
+
+export function connectDB () {
+    return new sqlite.Database('../databases/testDB.db', (err) => {
+        if (err) {
+            console.error(err.message)
+        }
+        else {
+            console.log('Connected to the database.')
+        }
+    })
+}
+
+export function closeDB (db) {
+    db.close((err) => {
+        if (err) {
+            console.error(err.message)
+        }
+        else {
+            console.log('Closed the database connection.')
+        }
+    })
+}
 
 export function displayOrders(db) {
     return new Promise((resolve, reject) => {

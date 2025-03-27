@@ -1,11 +1,5 @@
-import {User} from "../../type/user.mjs";
-
-/*-------------------------------------------*/
-//               USER QUERIES
-/*-------------------------------------------*/
-
 // User list retrieval
-export function getUsers (db) {
+export function retrieveUsersList (db) {
     return new Promise((resolve, reject) => {
         const sql = `SELECT * 
                     FROM users`;
@@ -22,7 +16,7 @@ export function getUsers (db) {
 }
 
 // Authenticate user by email or username and password
-export function authenticateUser(db, field, value, password) {
+export function getUser(db, field, value, password) {
     return new Promise((resolve, reject) => {
       const sql = `SELECT * FROM users WHERE ${field} = ? AND password = ?`;
   
