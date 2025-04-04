@@ -5,6 +5,44 @@
   text-align: center;
 }
 
+.grid-item {
+  background-color: #f8f9fa;
+  border: 1px solid #dee2e6;
+  border-radius: 5px;
+  padding: 20px;
+  margin-bottom: 20px;
+  height: 100%;
+  transition: transform 0.3s ease;
+}
+
+.grid-item:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.navbar {
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* Ensure logo sticks to very left */
+.navbar-brand {
+  margin-left: 0 !important;
+  padding-left: 0 !important;
+}
+
+/* Optional: Add padding to the navbar */
+.navbar {
+  padding: 0.5rem 1rem;
+}
+
+/* Logo hover effect */
+.navbar-brand img {
+  transition: transform 0.2s ease;
+}
+.navbar-brand:hover img {
+  transform: scale(1.1);
+}
+
 .logo {
   height: 6em;
   padding: 1.5em;
