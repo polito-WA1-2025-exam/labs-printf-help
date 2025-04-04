@@ -15,36 +15,6 @@ app.use(morgan('dev'))
 app.use('/user', userRoutes.router)
 app.use('/order', orderRoutes.router)
 
-const order = new Order({userID: 1});
-const bowl1 = new Bowl({size: 'S', base: 'White rice', proteins: ['Chicken'], ingredients: ['Lettuce', 'Tomato'], price: 10});
-const bowl2 = new Bowl({size: 'M', base: 'Black rice', proteins: ['Salmon', 'Shrimp'], ingredients: ['Mango', 'Avocado', 'Mais'], price: 12});
-
-order.addBowl(bowl1);
-order.addBowl(bowl2);
-
-console.log(order.toJSON());
-
-/*-------------------------------------------*/
-//                ORDER ROUTES
-/*-------------------------------------------*/
-
-// app.post('/order', (req, res) => {
-//     const errors = validationResult(req);
-//     if (!errors.isEmpty()) {
-//         // If there are validation errors, send a 400 Bad Request response with the errors
-//         return res.status(400).json({ errors: errors.array() });
-//     }
-
-//     orderQuery.addOrder(db, req.body)
-//     .then(() => {
-//         console.log('Order added successfully');
-//         res.status(200).end()
-//     })
-//     .catch((err) => {
-//         console.error(err)
-//         res.status(500).end()
-//     })
-// });
 
 // /*-------------------------------------------*/
 // /*                BOWL ROUTES                */

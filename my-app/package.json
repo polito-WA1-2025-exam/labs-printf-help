@@ -10,8 +10,10 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "morgan": "^1.10.0",
     "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "react-dom": "^19.0.0",
+    "sqlite3": "^5.1.7"
   },
   "devDependencies": {
     "@eslint/js": "^9.21.0",

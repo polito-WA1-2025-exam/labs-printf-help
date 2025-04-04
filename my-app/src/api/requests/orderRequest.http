@@ -9,9 +9,26 @@ GET http://localhost:3000/order/list
 GET http://localhost:3000/order/user?userId=2
 
 ###
-POST http://localhost:3000/order
+POST http://localhost:3000/order/submit
 Content-Type: application/json
 
 { "userID": 1,
   "appliedDiscount": "FALSE",
-  "total" : 5.5}
+  "total" : 5.5,
+  "bowl" : [
+    {
+        "size": "S",
+        "base": "White Rice",
+        "proteins": ["Chicken"],
+        "ingredients": ["Lettuce", "Tomato"],
+        "price": 5.5
+    },
+    {
+        "size": "M",
+        "base": "Black Rice",
+        "proteins": ["Salmon", "Shrimp"],
+        "ingredients": ["Avocado", "Mango", "Philadelphia"],
+        "price": 7.5
+    }
+  ]
+}
