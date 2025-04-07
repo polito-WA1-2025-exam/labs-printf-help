@@ -1,6 +1,8 @@
 import NavbarComponent from './components/NavbarComponent';
 import GridComponent from './components/GridComponent';
+import HeaderSteps from './components/HeaderSteps';
 import './index.css'; // Make sure this import exists
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 function App() {
   const gridItems = [
@@ -42,6 +44,9 @@ function App() {
         <NavbarComponent />
       </header>
       <main>
+        <div>
+          <HeaderSteps totalSteps={5} />
+        </div>
         <div className="container">
           <GridComponent items={gridItems} />
         </div>
