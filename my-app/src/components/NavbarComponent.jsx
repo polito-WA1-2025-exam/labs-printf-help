@@ -1,8 +1,15 @@
-import { Navbar, Nav, Container } from 'react-bootstrap';
+import { Navbar, Nav, Container, Button } from 'react-bootstrap';
+import { Link, useNavigate } from 'react-router-dom';  // Import useNavigate
 import logo from '../assets/pokeball.png';
-import { Link } from 'react-router-dom';
 
-const NavbarComponent = () => {
+const NavbarComponent = ({ isLoggedIn, onLogout }) => {
+  const navigate = useNavigate();  // Initialize navigate
+
+  // Function to handle Login button click
+  const handleLoginClick = () => {
+    navigate('/login');  // Redirect to login page
+  };
+
   return (
     <Navbar bg="primary" variant="dark" expand="lg" sticky="top">
       <Container>
@@ -23,11 +30,21 @@ const NavbarComponent = () => {
             <Nav.Link as={Link} to="/about">About</Nav.Link>
             <Nav.Link as={Link} to="/contact">Contact</Nav.Link>
           </Nav>
+          <Nav>
+            {isLoggedIn ? (
+              <button type="button" className="btn btn-dark" onClick={onLogout}>
+                Logout
+              </button>
+            ) : (
+              <button type="button" className="btn btn-danger" onClick={handleLoginClick}>
+                Login
+              </button>
+            )}
+          </Nav>
         </Navbar.Collapse>
       </Container>
     </Navbar>
   );
 };
-
 
 export default NavbarComponent;
