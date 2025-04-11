@@ -1,12 +1,9 @@
-import {Button, Card, Container} from 'react-bootstrap';
+import {Button, Card, Container, Row, Col} from 'react-bootstrap';
+import 'bootstrap-icons/font/bootstrap-icons.css';
 
-const GridItem = ({ title, content }) => {
+
+const GridItem = ({ title, content, image }) => {
     return (
-      // <div className="grid-item">
-      //   <h3>{title}</h3>
-      //   <p>{content}</p>
-      // </div>
-
       <Card className="mb-4 shadow-sm">
         <Card.Img variant="top" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRA5VjMKOaJ5BUIjOw2msxfF570rtO-Ov2Ntg&s" />
         <Card.Body>
@@ -15,9 +12,21 @@ const GridItem = ({ title, content }) => {
             {content}
           </Card.Text>
           <Container className="d-flex justify-content-center">
-            <Button variant="success" className="me-2">
-              <i className="bi bi-plus-circle-fill"></i>
-            </Button>
+            <Row>
+              <Col>
+                <Button variant="light" className="me-2" size='lg'>
+                  <i className="bi bi-dash-circle-fill"></i>
+                </Button>
+              </Col>
+              <Col>
+                <h2 className="text-center">0</h2>
+              </Col>
+              <Col>
+                <Button variant="light" className="me-2" size='lg'>
+                  <i className="bi bi-plus-circle-fill"></i>
+                </Button>
+              </Col>
+            </Row>
           </Container>
         </Card.Body>
       </Card>
