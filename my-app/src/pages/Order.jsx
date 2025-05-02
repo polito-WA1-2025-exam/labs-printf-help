@@ -1,46 +1,56 @@
-import {Container} from 'react-bootstrap';
+import {Container, Button} from 'react-bootstrap';
 import {useState} from 'react';
 
 import HeaderSteps from '../components/HeaderSteps';
 import GridComponent from '../components/GridComponent';
 
-import BowlClass from '../modules/bowl.mjs'; // Import the Bowl class
-
 export default function Order() {
-    const emptyBowl = new BowlClass(); // Create an empty bowl instance
+    const emptyBowl = {
+        localId: 0,
+        size: null,
+        base: null,
+        proteins: [],
+        ingredients: [],
+        initialPrice: 0,
+        extraIngredients: 0,
+        maxProteins: 0,
+        maxIngredients: 0
+    }; // Create an empty bowl instance
 
     const [activeStep, setActiveStep] = useState(1);
     const totalSteps = 5; // Total number of steps
 
-    const [bowl, setBowl] = useState(); // Initialize bowl state
+    const [bowl, setBowl] = useState(emptyBowl); // Initialize bowl state
 
-    const updateSize = (size) => {
+    const updateSize = (newSize) => {
         setBowl((prevBowl) => {
-            prevBowl.setSize(size); // Set the size of the bowl
-            return prevBowl; // Return the updated bowl
-        })
-    }
-
-    const updateBase = (base) => {
-        setBowl((prevBowl) => {
-            prevBowl.setBase(base); // Set the base of the bowl
-            return prevBowl; // Return the updated bowl
+            if (newSize == "Regular") {
+                return {...prevBowl, size: newSize, initialPrice : 9, maxProteins: 1, maxIngredients: 4};
+            } else if (newSize == "Medium") {
+                return {...prevBowl, size: newSize, initialPrice : 11, maxProteins: 2, maxIngredients: 4};
+            } else if (newSize == "Large") {
+                return {...prevBowl, size: newSize, initialPrice : 14, maxProteins: 3, maxIngredients: 6};
+            }
         })
     }
 
-    const updateProteins = (proteins) => {
+    const updateBase = (newBase) => {
         setBowl((prevBowl) => {
-            prevBowl.setProteins(proteins); // Set the proteins of the bowl
-            return prevBowl; // Return the updated bowl
-        })
-    }
-    
-    const updateIngredients = (ingredients) => {
+            return { ...prevBowl, base : newBase };
+        });
+    };
+
+    const updateProteins = (newProteins) => {
         setBowl((prevBowl) => {
-            prevBowl.setIngredients(ingredients); // Set the ingredients of the bowl
-            return prevBowl; // Return the updated bowl
-        })
-    }
+            return { ...prevBowl, proteins : newProteins };
+        });
+    };
+
+    const updateIngredients = (newIngredients) => {
+        setBowl((prevBowl) => {
+            return {...prevBowl, ingredients : newIngredients, extraIngredients : Math.max(0, newIngredients.length - prevBowl.maxIngredients)};
+        });
+    };
 
     const bowlSizes = [
         { 
@@ -181,7 +191,7 @@ export default function Order() {
     ];
 
     return (
-        <Container>
+        <>
             <HeaderSteps totalSteps={totalSteps} activeStep={activeStep} setActiveStep={setActiveStep} />
             {(() => {
                 const titles = [
@@ -215,6 +225,7 @@ export default function Order() {
                                 updateFunction={updateFunctions[activeStep - 1]} // Pass the corresponding update function
                                 activeStep={activeStep}
                                 setActiveStep={setActiveStep}
+                                maxProteins={/*TODO*/null} // Pass the bowl state to the GridComponent
                             />
                         </>
                     );
@@ -228,6 +239,10 @@ export default function Order() {
                     return <h2 className='text-center mb-4'>Something went wrong try again!</h2>;
                 }
             })()}
-        </Container>
+            <Container className = "justify-content-md-right my-5">
+                <Button disabled = {activeStep == 1 ? true : false} variant='secondary' className = "mx-2" onClick={() => setActiveStep(activeStep - 1)}>Previous</Button>
+                <Button variant='primary' className = "mx-2" onClick={() => setActiveStep(activeStep + 1)}>Next</Button>
+            </Container>
+        </>
     );
 }

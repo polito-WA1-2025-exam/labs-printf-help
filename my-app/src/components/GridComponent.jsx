@@ -9,10 +9,14 @@ const GridComponent = (props) => {
         {props.items.map((item) => (
           <Col lg={4} key={item.id}>
             {props.activeStep === 1 || props.activeStep === 2 ? (
-              <SingleChoiceCardItem title={item.title} content={item.content} image={item.image} />
-            ) : (props.activeStep === 3 || props.activeStep === 4 ? (
-              <CardItem title={item.title} content={item.content} image={item.image} />
-            ) : null)}
+              <SingleChoiceCardItem updateFunction = {props.updateFunction} title={item.title} content={item.content} image={item.image} />
+            ) : (props.activeStep === 3 ? (
+              <CardItem maxProteins = {props.maxProteins} updateFunction = {props.updateFunction} title={item.title} content={item.content} image={item.image} />
+            ) :
+            (props.activeStep === 4 ? (
+              <CardItem updateFunction = {props.updateFunction} title={item.title} content={item.content} image={item.image} />
+            ) :
+            null))}
           </Col>
         ))}
       </Row>
