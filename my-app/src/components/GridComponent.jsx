@@ -1,14 +1,18 @@
 import { Container, Row, Col } from 'react-bootstrap';
 import CardItem from './CardItem';
+import SingleChoiceCardItem from './SingleChoicesCardItem';
 
-const GridComponent = ({ items }) => {
+const GridComponent = (props) => {
   return (
     <Container className="my-5">
-      <h1 className="text-center mb-4">Pick your Poison</h1>
       <Row xs = {1} md = {2} lg = {3} className="g-4">
-        {items.map((item) => (
+        {props.items.map((item) => (
           <Col lg={4} key={item.id}>
-            <CardItem title={item.title} content={item.content} image = {item.image}/>
+            {props.activeStep === 1 || props.activeStep === 2 ? (
+              <SingleChoiceCardItem title={item.title} content={item.content} image={item.image} />
+            ) : (props.activeStep === 3 || props.activeStep === 4 ? (
+              <CardItem title={item.title} content={item.content} image={item.image} />
+            ) : null)}
           </Col>
         ))}
       </Row>
