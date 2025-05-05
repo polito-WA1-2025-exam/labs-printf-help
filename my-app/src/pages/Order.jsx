@@ -1,5 +1,5 @@
 import {Container, Button} from 'react-bootstrap';
-import {useState} from 'react';
+import {act, useState} from 'react';
 
 import HeaderSteps from '../components/HeaderSteps';
 import GridComponent from '../components/GridComponent';
@@ -7,40 +7,17 @@ import GridComponent from '../components/GridComponent';
 import Bowl from '../modules/bowl.mjs';
 
 export default function Order() {
-    const emptyBowl = new Bowl(undefined, undefined, undefined, [], []); // Initialize empty bowl
+    const emptyBowl = new Bowl(undefined, undefined, undefined, [], [], undefined); // Initialize empty bowl
 
     const [activeStep, setActiveStep] = useState(1);
     const totalSteps = 5; // Total number of steps
 
     const [bowl, setBowl] = useState(emptyBowl); // Initialize bowl state
 
-    const updateSize = (newSize) => {
-        setBowl((prevBowl) => {
-            const newBowl = new Bowl(prevBowl.getLocalId(), newSize, prevBowl.getBase(), prevBowl.getProteins(), prevBowl.getIngredients());
-            return newBowl
-        })
-    }
-
-    const updateBase = (newBase) => {
-        setBowl((prevBowl) => {
-            const newBowl = new Bowl(prevBowl.getLocalId(), prevBowl.getSize(), newBase, prevBowl.getProteins(), prevBowl.getIngredients());
-            return newBowl
-        });
-    };
-
-    const updateProteins = (newProteins) => {
-        setBowl((prevBowl) => {
-            const newBowl = new Bowl(prevBowl.getLocalId(), prevBowl.getSize(), prevBowl.getBase(), newProteins, prevBowl.getIngredients())
-            return newBowl
-        });
-    };
-
-    const updateIngredients = (newIngredients) => {
-        setBowl((prevBowl) => {
-            const newBowl = new Bowl(prevBowl.getLocalId(), prevBowl.getSize(), prevBowl.getBase(), prevBowl.getProteins(), newIngredients)
-            return newBowl
-        });
-    };
+    const [size, setSize] = useState(undefined); // Initialize size state
+    const [base, setBase] = useState(undefined); // Initialize base state
+    const [proteins, setProteins] = useState([]); // Initialize proteins state
+    const [ingredients, setIngredients] = useState([]); // Initialize ingredients state
 
     const bowlSizes = [
         { 
@@ -180,11 +157,18 @@ export default function Order() {
         }
     ];
 
-    const updateFunctions = [
-        updateSize,
-        updateBase,
-        updateProteins,
-        updateIngredients
+    const setFunctions = [
+        setSize,
+        setBase,
+        setProteins,
+        setIngredients
+    ]
+
+    const attributes = [
+        size,
+        base,
+        proteins,
+        ingredients
     ]
 
     const items = [
@@ -197,7 +181,13 @@ export default function Order() {
     return (
         <>
             <HeaderSteps totalSteps={totalSteps} activeStep={activeStep} setActiveStep={setActiveStep} />
-            <GridComponent items = {items[activeStep - 1]} updateFunction = {updateFunctions[activeStep - 1]} activeStep = {activeStep}/>
+            {activeStep < 5 ? (
+                <GridComponent attribute = {attributes[activeStep - 1]} showingItems = {items[activeStep - 1]} setFunction = {setFunctions[activeStep - 1]} activeStep = {activeStep}/>
+            ) :
+            (
+                <></>
+            )}
+            
             <Container className = "justify-content-md-right my-5">
                 <Button disabled = {activeStep == 1 ? true : false} variant='secondary' className = "mx-2" onClick={() => setActiveStep(activeStep - 1)}>Previous</Button>
                 <Button variant='primary' className = "mx-2" onClick={() => setActiveStep(activeStep + 1)}>Next</Button>

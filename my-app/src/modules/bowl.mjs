@@ -1,12 +1,12 @@
 // BOWL CLASS
 class Bowl {
-    constructor(localId, size, base, proteins, ingredients) {
+    constructor(localId, size, base, proteins, ingredients, price) {
         this.localId = localId; // Local ID for the bowl
         this.size = size; // Size of the bowl
         this.base = base; // Base of the bowl
         this.proteins = proteins; // List of proteins in the bowl
         this.ingredients = ingredients; // List of ingredients in the bowl
-        this.price; // Price of the bowl
+        this.price = price; // Price of the bowl
     }
 
     getLocalId() {
@@ -27,10 +27,6 @@ class Bowl {
     getProteins() {
         let list = [];
 
-        if (this.proteins === null) {
-            return list;
-        }
-
         this.proteins.forEach(protein => {
             list.push(protein.getProtein());
         });
@@ -40,10 +36,6 @@ class Bowl {
 
     getIngredients() {
         let list = [];
-
-        if (this.ingredients === null) {
-            return list;
-        }
 
         this.ingredients.forEach(ingredients => {
             list.push(ingredients.getIngredient());
@@ -103,6 +95,15 @@ class Bowl {
             return this.ingredients.join(",");
         }
         else return null;
+    }
+
+    print() {
+        console.log("Bowl Details:");
+        console.log("Size:", this.size);
+        console.log("Base:", this.base);
+        console.log("Proteins:", this.proteins.map(protein => protein.getProtein()).join(", "));
+        console.log("Ingredients:", this.ingredients.map(ingredient => ingredient.getIngredient()).join(", "));
+        console.log("Price:", this.price);
     }
 }
 
