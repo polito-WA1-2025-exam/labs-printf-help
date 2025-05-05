@@ -1,6 +1,6 @@
 import { Navbar, Nav, Container, Button } from 'react-bootstrap';
 import { Link, useNavigate } from 'react-router-dom';  // Import useNavigate
-import logo from '../assets/pokeball.png';
+import logo from '../../assets/pokeball.png';
 
 const NavbarComponent = ({ isLoggedIn, onLogout }) => {
   const navigate = useNavigate();  // Initialize navigate

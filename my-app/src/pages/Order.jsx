@@ -4,18 +4,10 @@ import {useState} from 'react';
 import HeaderSteps from '../components/HeaderSteps';
 import GridComponent from '../components/GridComponent';
 
+import Bowl from '../modules/bowl.mjs';
+
 export default function Order() {
-    const emptyBowl = {
-        localId: 0,
-        size: null,
-        base: null,
-        proteins: [],
-        ingredients: [],
-        initialPrice: 0,
-        extraIngredients: 0,
-        maxProteins: 0,
-        maxIngredients: 0
-    }; // Create an empty bowl instance
+    const emptyBowl = new Bowl(undefined, undefined, undefined, [], []); // Initialize empty bowl
 
     const [activeStep, setActiveStep] = useState(1);
     const totalSteps = 5; // Total number of steps
@@ -24,31 +16,29 @@ export default function Order() {
 
     const updateSize = (newSize) => {
         setBowl((prevBowl) => {
-            if (newSize == "Regular") {
-                return {...prevBowl, size: newSize, initialPrice : 9, maxProteins: 1, maxIngredients: 4};
-            } else if (newSize == "Medium") {
-                return {...prevBowl, size: newSize, initialPrice : 11, maxProteins: 2, maxIngredients: 4};
-            } else if (newSize == "Large") {
-                return {...prevBowl, size: newSize, initialPrice : 14, maxProteins: 3, maxIngredients: 6};
-            }
+            const newBowl = new Bowl(prevBowl.getLocalId(), newSize, prevBowl.getBase(), prevBowl.getProteins(), prevBowl.getIngredients());
+            return newBowl
         })
     }
 
     const updateBase = (newBase) => {
         setBowl((prevBowl) => {
-            return { ...prevBowl, base : newBase };
+            const newBowl = new Bowl(prevBowl.getLocalId(), prevBowl.getSize(), newBase, prevBowl.getProteins(), prevBowl.getIngredients());
+            return newBowl
         });
     };
 
     const updateProteins = (newProteins) => {
         setBowl((prevBowl) => {
-            return { ...prevBowl, proteins : newProteins };
+            const newBowl = new Bowl(prevBowl.getLocalId(), prevBowl.getSize(), prevBowl.getBase(), newProteins, prevBowl.getIngredients())
+            return newBowl
         });
     };
 
     const updateIngredients = (newIngredients) => {
         setBowl((prevBowl) => {
-            return {...prevBowl, ingredients : newIngredients, extraIngredients : Math.max(0, newIngredients.length - prevBowl.maxIngredients)};
+            const newBowl = new Bowl(prevBowl.getLocalId(), prevBowl.getSize(), prevBowl.getBase(), prevBowl.getProteins(), newIngredients)
+            return newBowl
         });
     };
 
@@ -190,55 +180,24 @@ export default function Order() {
         }
     ];
 
+    const updateFunctions = [
+        updateSize,
+        updateBase,
+        updateProteins,
+        updateIngredients
+    ]
+
+    const items = [
+        bowlSizes,
+        bowlBases,
+        bowlProteins,
+        bowlIngredients
+    ]
+
     return (
         <>
             <HeaderSteps totalSteps={totalSteps} activeStep={activeStep} setActiveStep={setActiveStep} />
-            {(() => {
-                const titles = [
-                    "Select Bowl Size",
-                    "Select Bowl Base",
-                    "Select Proteins",
-                    "Select Ingredients",
-                    "Review your order"
-                ];
-
-                const items = [
-                    bowlSizes,
-                    bowlBases,
-                    bowlProteins,
-                    bowlIngredients
-                ];
-
-                const updateFunctions = [
-                    updateSize,
-                    updateBase,
-                    updateProteins,
-                    updateIngredients
-                ];
-
-                if (activeStep >= 1 && activeStep <= 4) {
-                    return (
-                        <>
-                            <h2 className='text-center mb-4'>{titles[activeStep - 1]}</h2>
-                            <GridComponent
-                                items={items[activeStep - 1]}
-                                updateFunction={updateFunctions[activeStep - 1]} // Pass the corresponding update function
-                                activeStep={activeStep}
-                                setActiveStep={setActiveStep}
-                                maxProteins={/*TODO*/null} // Pass the bowl state to the GridComponent
-                            />
-                        </>
-                    );
-                } else if (activeStep === 5) {
-                    return (
-                        <>
-                            <h2 className='text-center mb-4'>{titles[activeStep - 1]}</h2>
-                        </>
-                    );
-                } else {
-                    return <h2 className='text-center mb-4'>Something went wrong try again!</h2>;
-                }
-            })()}
+            <GridComponent items = {items[activeStep - 1]} updateFunction = {updateFunctions[activeStep - 1]} activeStep = {activeStep}/>
             <Container className = "justify-content-md-right my-5">
                 <Button disabled = {activeStep == 1 ? true : false} variant='secondary' className = "mx-2" onClick={() => setActiveStep(activeStep - 1)}>Previous</Button>
                 <Button variant='primary' className = "mx-2" onClick={() => setActiveStep(activeStep + 1)}>Next</Button>

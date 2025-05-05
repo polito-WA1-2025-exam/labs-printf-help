@@ -1,10 +1,11 @@
+import Layout from './pages/Layout'
+
 import Home from './pages/Home';
 import About from './pages/About';
 import Contact from './pages/Contact';
 import Login from './pages/Login';
 import Order from './pages/Order';
 import Invalid from './pages/Invalid';
-import NavbarComponent from './components/NavbarComponent';
 
 import { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
@@ -44,16 +45,15 @@ function App() {
 
   return (
     <Router>
-      
-      <NavbarComponent isLoggedIn={isLoggedIn} onLogout={handleLogout} />
-
       <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/about" element={<About />} />
-        <Route path="/contact" element={<Contact />} />
-        <Route path="/login" element={<Login onLogin={handleLogin} />} />
-        <Route path = "/order" element = { <Order addBowlToOrder = {addBowlToOrder}/>} />
-        <Route path="*" element={<Invalid/>} /> 
+        <Route path="/" element={<Layout />} isLoggedIn={isLoggedIn} onLogout={handleLogout} >
+          <Route index element={<Home />} />
+          <Route path="about" element={<About />} />
+          <Route path="contact" element={<Contact />} />
+          <Route path="login" element={<Login onLogin={handleLogin} />} />
+          <Route path = "order" element = { <Order addBowlToOrder = {addBowlToOrder}/>} />
+          <Route path="*" element={<Invalid/>} /> 
+        </Route>
       </Routes>
     </Router>
   );
