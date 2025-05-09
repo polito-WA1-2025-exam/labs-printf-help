@@ -30,6 +30,43 @@
   padding-left: 0 !important;
 }
 
+.login-form {
+  background-color: #f9f9f9;
+  padding: 12px;
+  width: 50%;
+  margin: 0 auto;
+  border-radius: 10px;
+  box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.1);
+}
+
+.login-form .form-label {
+  font-weight: bold;
+  color: #333;
+}
+
+.login-form .form-control {
+  border: 2px solid gray;
+  border-radius: 5px;
+  margin: 0 auto;
+  width: 50%;
+}
+
+.login-form .form-control:focus {
+  border-color: #0056b3;
+  box-shadow: 0px 0px 5px rgba(0, 123, 255, 0.5);
+}
+
+.login-form .btn-login {
+  background-color: #007bff; /* Bootstrap blue */
+  color: white;
+  font-size: 16px;
+  padding: 8px 12px;
+  margin-top: 12px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+}
 /* Optional: Add padding to the navbar */
 .navbar {
   padding: 0.5rem 1rem;

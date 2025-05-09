@@ -1,4 +1,5 @@
 import { useNavigate } from 'react-router-dom';
+import LoginForm from '../components/LoginForm';
 
 export default function Login({ onLogin }) {
   const navigate = useNavigate();
@@ -11,9 +12,10 @@ export default function Login({ onLogin }) {
   return (
     <div className="container mt-4">
       <h1>Login</h1>
-      <button className="btn btn-primary mt-3" onClick={handleLoginClick}>
+      <LoginForm handleLoginClick={handleLoginClick}/>
+      {/* <button className="btn btn-primary mt-3" onClick={handleLoginClick}>
         Log In
-      </button>
+      </button> */}
     </div>
   );
 
