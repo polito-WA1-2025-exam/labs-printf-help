@@ -2,7 +2,7 @@ import { Navbar, Nav, Container, Button } from 'react-bootstrap';
 import { Link, useNavigate } from 'react-router-dom';  // Import useNavigate
 import logo from '../../assets/pokeball.png';
 
-const NavbarComponent = ({ isLoggedIn, onLogout }) => {
+const NavbarComponent = (props) => {
   const navigate = useNavigate();  // Initialize navigate
 
   // Function to handle Login button click
@@ -32,8 +32,8 @@ const NavbarComponent = ({ isLoggedIn, onLogout }) => {
             <Nav.Link as={Link} to="/order">Place an order</Nav.Link>
           </Nav>
           <Nav>
-            {isLoggedIn ? (
-              <button type="button" className="btn btn-dark" onClick={onLogout}>
+            {props.isLoggedIn ? (
+              <button type="button" className="btn btn-dark" onClick={props.onLogout}>
                 Logout
               </button>
             ) : (

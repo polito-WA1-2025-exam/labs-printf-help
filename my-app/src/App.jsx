@@ -21,11 +21,11 @@ function App() {
   const [order, setOrder] = useState(emptyOrder); // Initialize order state
 
   const handleLogin = () => {
-    setIsLoggedIn(true)
+    setIsLoggedIn(true);
     order.setUserID(1); // Set user ID to 1 for the logged-in user
   };
   const handleLogout = () => {
-    setIsLoggedIn(false)
+    setIsLoggedIn(false);
     setOrder(emptyOrder); // Reset the order when logging out
   };
 
@@ -46,7 +46,7 @@ function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Layout />} isLoggedIn={isLoggedIn} onLogout={handleLogout} >
+        <Route path="/" element={<Layout isLoggedIn={isLoggedIn} onLogout={handleLogout}/>} >
           <Route index element={<Home />} />
           <Route path="about" element={<About />} />
           <Route path="contact" element={<Contact />} />

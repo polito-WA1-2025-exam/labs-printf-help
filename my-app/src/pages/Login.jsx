@@ -1,11 +1,11 @@
 import { useNavigate } from 'react-router-dom';
 import LoginForm from '../components/LoginForm';
 
-export default function Login({ onLogin }) {
+export default function Login(props) {
   const navigate = useNavigate();
 
   const handleLoginClick = () => {
-    onLogin();         // Set login state
+    props.onLogin();         // Set login state
     navigate('/');     // Navigate to home (or any other page)
   };
 
