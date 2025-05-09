@@ -1,5 +1,3 @@
-import { Order } from "../../type/order.mjs";
-
 export function retrieveOrdersList (db) {
     return new Promise ((resolve, reject) => {
         const sql = `SELECT * 

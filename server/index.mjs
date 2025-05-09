@@ -13,3 +13,5 @@ app.use(express.json())
 app.use(morgan('dev'))
 app.use('/api/user', userRoutes.router)
 app.use('/api/order', orderRoutes.router)
+
+app.listen(port, () => {console.log(`Api server started at http://localhost:${port}`)})

@@ -3,7 +3,7 @@ import { validationResult } from 'express-validator';
 import * as userQueries from '../queries/userQueries.mjs';
 import * as genericQueries from '../queries/genericQueries.mjs';
 
-import {User} from '../../type/user.mjs';
+// import {User} from '../../type/user.mjs';
 
 export function getUsers (req, res) {
     const db = genericQueries.connectDB();
@@ -85,60 +85,60 @@ export function authenticateUser (req, res) {
         })
 }
 
-export function postUser (req, res) {
-    const db = genericQueries.connectDB();
-    const errors = validationResult(req);
+// export function postUser (req, res) {
+//     const db = genericQueries.connectDB();
+//     const errors = validationResult(req);
     
-    // Check validation errors
-    if (!errors.isEmpty()) {
-        return res.status(400).json({ errors: errors.array() });
-    }
+//     // Check validation errors
+//     if (!errors.isEmpty()) {
+//         return res.status(400).json({ errors: errors.array() });
+//     }
 
-    // Create a new user object
-    const user = new User(req.body.username, req.body.email, req.body.password);
+//     // Create a new user object
+//     const user = new User(req.body.username, req.body.email, req.body.password);
 
-    // Add the user to the database
-    userQueries.addUser(db, user)
-    .then(() => {
-        console.log('User added successfully');
-        res.status(201).send('User created');
-    })
-    .catch((err) => {  
-        console.error(err);
+//     // Add the user to the database
+//     userQueries.addUser(db, user)
+//     .then(() => {
+//         console.log('User added successfully');
+//         res.status(201).send('User created');
+//     })
+//     .catch((err) => {  
+//         console.error(err);
 
-        // Check for specific error messages and return appropriate response
-        if (err.message === 'Username already taken' || err.message === 'Email already in use') {
-            res.status(409).send(err.message);
-        } else {
-            res.status(500).send('Internal Server Error');
-        }
-    })
-    .finally(() => {
-        genericQueries.closeDB(db);
-    });
-}
+//         // Check for specific error messages and return appropriate response
+//         if (err.message === 'Username already taken' || err.message === 'Email already in use') {
+//             res.status(409).send(err.message);
+//         } else {
+//             res.status(500).send('Internal Server Error');
+//         }
+//     })
+//     .finally(() => {
+//         genericQueries.closeDB(db);
+//     });
+// }
 
-export function deleteUser (req, res) {
-    const db = genericQueries.connectDB();
+// export function deleteUser (req, res) {
+//     const db = genericQueries.connectDB();
 
-    const user = new User(req.body.username, req.body.email, req.body.password);
+//     const user = new User(req.body.username, req.body.email, req.body.password);
 
-    userQueries.delUser(db, user)
-    .then(() => {
-        console.log('User deleted successfully');
-        res.status(200).end()
-    })
-    .catch((err) => {
-        console.error(err);
+//     userQueries.delUser(db, user)
+//     .then(() => {
+//         console.log('User deleted successfully');
+//         res.status(200).end()
+//     })
+//     .catch((err) => {
+//         console.error(err);
         
-        // Check for specific error messages and return them to the client
-        if (err.message === 'User not found or parameters are incorrect') {
-            res.status(404).send('User not found or incorrect parameters');
-        } else {
-            res.status(500).send('Internal Server Error');
-        }
-    })
-    .finally(() => {
-        genericQueries.closeDB(db);
-    })
-}
+//         // Check for specific error messages and return them to the client
+//         if (err.message === 'User not found or parameters are incorrect') {
+//             res.status(404).send('User not found or incorrect parameters');
+//         } else {
+//             res.status(500).send('Internal Server Error');
+//         }
+//     })
+//     .finally(() => {
+//         genericQueries.closeDB(db);
+//     })
+// }

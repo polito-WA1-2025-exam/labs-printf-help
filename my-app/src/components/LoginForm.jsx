@@ -1,10 +1,7 @@
 import { useState } from "react"
 import { Form, Button } from "react-bootstrap"
 
-const users = {
-    "me@gmail.com":"1234",
-    "you@gmail.com":"666"
-}
+import { authenticateUser } from "../api/userApi.mjs"
 
 function LoginForm(props){
     const [email, setEmail] = useState('')
@@ -23,15 +20,18 @@ function LoginForm(props){
         e.preventDefault()
         
         // login check e cambio in vaid
-        if(users[email]==password){
-            setValid(1)
-            setEmail("")
-            setPassword("")
-            props.handleLoginClick()
-        }
-        else{
-            setValid(-1)
-        }
+        authenticateUser(email, password)
+        .then((response) => {
+            if(response){
+                setValid(1)
+                setEmail("")
+                setPassword("")
+                props.handleLoginClick()
+            }
+            else{
+                setValid(-1)
+            }
+        })
     }
     return <>
     <Form className="login-form" onSubmit={submitLogin}>

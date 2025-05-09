@@ -7,7 +7,9 @@ import Login from './pages/Login';
 import Order from './pages/Order';
 import Invalid from './pages/Invalid';
 
-import { useState } from 'react';
+import { loadOrders } from './api/api.mjs';
+
+import { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 
@@ -42,6 +44,11 @@ function App() {
       return prevOrder; // Return the updated order
     })
   }
+
+  useEffect (() => {
+    loadOrders(1).then((dataLoaded) => {
+    })
+  }, [])
 
   return (
     <Router>
