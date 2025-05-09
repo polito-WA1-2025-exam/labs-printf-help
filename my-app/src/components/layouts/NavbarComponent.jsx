@@ -1,6 +1,6 @@
 import { Navbar, Nav, Container, Button } from 'react-bootstrap';
 import { Link, useNavigate } from 'react-router-dom';  // Import useNavigate
-import logo from '../assets/pokeball.png';
+import logo from '../../assets/pokeball.png';
 
 const NavbarComponent = ({ isLoggedIn, onLogout }) => {
   const navigate = useNavigate();  // Initialize navigate
@@ -29,6 +29,7 @@ const NavbarComponent = ({ isLoggedIn, onLogout }) => {
             <Nav.Link as={Link} to="/">Home</Nav.Link>
             <Nav.Link as={Link} to="/about">About</Nav.Link>
             <Nav.Link as={Link} to="/contact">Contact</Nav.Link>
+            <Nav.Link as={Link} to="/order">Place an order</Nav.Link>
           </Nav>
           <Nav>
             {isLoggedIn ? (

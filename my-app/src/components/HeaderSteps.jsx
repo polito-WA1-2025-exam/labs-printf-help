@@ -1,13 +1,11 @@
 import React, { useState } from 'react';
 import { Navbar, Button } from 'react-bootstrap';
 
-const HeaderSteps = ({ totalSteps }) => {
-  const [activeStep, setActiveStep] = useState(1);
-
+const HeaderSteps = (props) => {
   const renderSteps = () => {
-    return Array.from({ length: totalSteps }, (_, index) => {
+    return Array.from({ length: props.totalSteps }, (_, index) => {
       const step = index + 1;
-      const isActive = step === activeStep;
+      const isActive = step === props.activeStep;
 
       return (
         <Button
@@ -20,7 +18,7 @@ const HeaderSteps = ({ totalSteps }) => {
             fontSize: '18px',
             fontWeight: 'bold',
           }}
-          onClick={() => setActiveStep(step)}
+          onClick={() => props.setActiveStep(step)}
         >
           {step}
         </Button>

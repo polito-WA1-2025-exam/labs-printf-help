@@ -1,12 +1,10 @@
-import dayjs from "dayjs";
-
-export class Order {
-    constructor({orderId = null, userID, orderDate, total = 0, appliedDiscount = "FALSE"}) {
-        this.orderId = orderId;
-        this.userID = userID; 
-        this.orderDate = orderDate? orderDate : dayjs().format('YYYY-MM-DD');
-        this.total = total;
-        this.appliedDiscount = appliedDiscount;
+class Order {
+    constructor() {
+        this.orderId = null; // Order ID
+        this.userID; 
+        this.orderDate;
+        this.total = 0;
+        this.appliedDiscount = "FALSE";
         this.bowls = [];
     }
     // Getters
@@ -56,6 +54,14 @@ export class Order {
 
     addBowl (bowl) {
         this.bowls.push(bowl);
+        this.total += bowl.getPrice(); // Update total price
+        if (this.bowls.length >= 4) {
+            this.appliedDiscount = "TRUE"; // Set discount if more than one bowl is added
+        }
+    }
+
+    delBowl (id) {
+        this.bowls.filter(bowl => bowl.getLocalId() !== id); // Filter out the bowl with the given ID
     }
 
     // Convert to JSON
@@ -81,3 +87,5 @@ export class Order {
         );
     }
 }
+
+export default Order;
