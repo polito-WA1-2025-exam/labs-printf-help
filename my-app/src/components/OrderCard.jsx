@@ -11,15 +11,15 @@ function OrderCard(props) {
     }
 
     return (
-        <Card>
+        <Card className="mb-4 shadow-sm">
             <Card.Body>
-                <div>
+                <div className="d-flex justify-content-between align-items-start">
                     <div>
-                        <h5>Order {order.id}</h5>
-                        <p>
+                        <h5 className="mb-2">Order {order.id}</h5>
+                        <p className="mb-1 text-muted">
                             Date: {new Date(order.orderDate).toLocaleString()}
                         </p>
-                        <p>Total: {order.totalPrice.toFixed(1)} €</p>
+                        <p className="mb-0 fw-semibold">Total: {order.totalPrice.toFixed(1)} €</p>
                     </div>
                     <Button variant="outline-secondary" size="sm" onClick={toggleExpanded}>
                         {expanded ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
@@ -27,9 +27,10 @@ function OrderCard(props) {
                 </div>
 
                 {expanded && (
-                    <div>
-                        <p>User ID: {order.userId}</p>
-                        <p>Discount Applied: ${order.appliedDicount.toFixed(2)}</p>
+                    <div className="mt-3 border-top pt-3">
+                        <p className="mb-1">User id: {order.userId}</p>
+                        <p className="mb-0">Discount Applied: {order.appliedDicount.toFixed(1)} €
+                        </p>
                     </div>
                 )}
             </Card.Body>
