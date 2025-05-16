@@ -1,7 +1,7 @@
 import Layout from './pages/Layout'
 
 import Home from './pages/Home';
-import About from './pages/About';
+import OrderHistory from './pages/OrderHistory';
 import Contact from './pages/Contact';
 import Login from './pages/Login';
 import Order from './pages/Order';
@@ -55,7 +55,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Layout isLoggedIn={isLoggedIn} onLogout={handleLogout}/>} >
           <Route index element={<Home />} />
-          <Route path="about" element={<About />} />
+          <Route path="orderhistory" element={<OrderHistory />} />
           <Route path="contact" element={<Contact />} />
           <Route path="login" element={<Login onLogin={handleLogin} />} />
           <Route path = "order" element = { <Order addBowlToOrder = {addBowlToOrder}/>} />
